@@ -1,0 +1,191 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+  {% if user.is_authenticated %}
+    <div>
+      <div id="MisEnvios">
+        <div id="MisEnviosPreparados">
+          {% if to_send_p %}
+              
+          <table class="table table-hover">   
+            <thead>
+              <h5 class="pb-2 border-bottom">Mis Envios Preparados</h5>
+              <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Usuario</th>
+                <th scope="col">Origen</th>
+                <th scope="col">Destino</th>
+              </tr>
+            </thead>
+            
+            <tbody>
+            {% for send in to_send_p %} 
+              <tr class="table-danger">
+                <th scope="row">
+                  <a class="nav-link d-flex align-items-center gap-2" href="route/{{ send.id }}">{{ send.id }}</a>
+                </th>
+                <td>
+                  <a class="nav-link d-flex align-items-center gap-2" href="route/{{ send.id }}">{{send.preparation_date}}</a>
+                </td>
+                <td>
+                  <a class="nav-link d-flex align-items-center gap-2" href="route/{{ send.id }}">{{send.user}}</a>
+                </td>
+                <td>
+                  <a class="nav-link d-flex align-items-center gap-2" href="route/{{ send.id }}">{{send.origin}}</a>
+                </td>
+                <td>
+                  <a class="nav-link d-flex align-items-center gap-2" href="route/{{ send.id }}">{{send.destination}}</a>
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+
+          {% else %}
+            <div class="alert alert-light alert-dismissible fade show" role="alert">No tienes envios preparados a enviar.
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          
+          {% endif %}
+        </div>
+        <div id="MisEnviosEnCamino">
+          {% if to_send_c %}
+            <table class="table table-hover">
+              <thead>
+                <h5 class="pb-2 border-bottom">Mis Envios En Camino</h5>
+                <tr>
+                  <th scope="col">Id</th>
+                  <th scope="col">Fecha</th>
+                  <th scope="col">Usuario</th>
+                  <th scope="col">Origen</th>
+                  <th scope="col">Destino</th>
+                </tr>
+              </thead>
+              
+              <tbody>
+              {% for send in to_send_c %}
+              <tr class="table-success">
+                <th scope="row">
+                  <a class="nav-link d-flex align-items-center gap-2" href="route/{{ send.id }}">{{ send.id }}</a>
+                </th>
+                <td>
+                  <a class="nav-link d-flex align-items-center gap-2" href="route/{{ send.id }}">{{send.preparation_date}}</a>
+                </td>
+                <td>
+                  <a class="nav-link d-flex align-items-center gap-2" href="route/{{ send.id }}">{{send.user}}</a>
+                </td>
+                <td>
+                  <a class="nav-link d-flex align-items-center gap-2" href="route/{{ send.id }}">{{send.origin}}</a>
+                </td>
+                <td>
+                  <a class="nav-link d-flex align-items-center gap-2" href="route/{{ send.id }}">{{send.destination}}</a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+            {% else %}
+              <div class="alert alert-light alert-dismissible fade show" role="alert">No tienes envios envios en camino.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+          {% endif %}
+        </div>
+      </div>    
+      <div id="ARecibir">
+        <div id="ARecibirEnCamino">
+          {% if to_receive_c %}
+            <table class="table table-hover">
+              
+              <thead>
+                <h5 class="pb-2 border-bottom">Pedidos En Camino A Recibir</h5>
+                <tr>
+                  <th scope="col">Id</th>
+                  <th scope="col">Fecha</th>
+                  <th scope="col">Usuario</th>
+                  <th scope="col">Origen</th>
+                  <th scope="col">Destino</th>
+                </tr>
+              </thead>
+              <tbody>
+            {% for receive in to_receive_c %}
+
+            <tr class="table-warning">
+              <th scope="row">
+                <a class="nav-link d-flex align-items-center gap-2" href="route/{{ receive.id }}">{{ receive.id }}</a>
+              </th>
+              <td>
+                <a class="nav-link d-flex align-items-center gap-2" href="route/{{ receive.id }}">{{receive.preparation_date}}</a>
+              </td>
+              <td>
+                <a class="nav-link d-flex align-items-center gap-2" href="route/{{ receive.id }}">{{receive.user}}</a>
+              </td>
+              <td>
+                <a class="nav-link d-flex align-items-center gap-2" href="route/{{ receive.id }}">{{receive.origin}}</a>
+              </td>
+              <td>
+                <a class="nav-link d-flex align-items-center gap-2" href="route/{{ receive.id }}">{{receive.destination}}</a>
+              </td>
+            </tr>       
+            {% endfor %}
+          </tbody>
+            {% else %}
+            <div class="alert alert-light alert-dismissible fade show" role="alert">No tienes pedidos en camino a recibir.
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endif %}   
+        </div>    
+        <div id="ARecibirPreparados">
+          {% if to_receive_p %}
+          <table class="table table-hover">
+              
+            <thead>
+              <h5 class="pb-2 border-bottom">Pedidos Preparados A Recibir</h5>
+              <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Usuario</th>
+                <th scope="col">Origen</th>
+                <th scope="col">Destino</th>
+              </tr>
+            </thead>
+            <tbody>
+        
+            {% for receive in to_receive_p %}
+            <tr class="table-danger">
+              <th scope="row">
+                <a class="nav-link d-flex align-items-center gap-2" href="route/{{ receive.id }}">{{ receive.id }}</a>
+              </th>
+              <td>
+                <a class="nav-link d-flex align-items-center gap-2" href="route/{{ receive.id }}">{{receive.preparation_date}}</a>
+              </td>
+              <td>
+                <a class="nav-link d-flex align-items-center gap-2" href="route/{{ receive.id }}">{{receive.user}}</a>
+              </td>
+              <td>
+                <a class="nav-link d-flex align-items-center gap-2" href="route/{{ receive.id }}">{{receive.origin}}</a>
+              </td>
+              <td>
+                <a class="nav-link d-flex align-items-center gap-2" href="route/{{ receive.id }}">{{receive.destination}}</a>
+              </td>
+            </tr>              
+            {% endfor %}
+          </tbody>
+          {% else %}
+            <div class="alert alert-light alert-dismissible fade show" role="alert">No tienes pedidos preparados a recibir.
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endif %}
+        </div>
+      </div>   
+    </div>
+  
+  {% else %}
+    <h1>Hoja de Ruta</h1>
+      <p>Bienvenido a <em>Hoja de Ruta</em>, dentro de este sitio crearás, recibirás y verás el estado de tus envíos.</p>
+
+    <div class="alert alert-light alert-dismissible fade show" role="alert">Inicia sesion para acceder al sitio...
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endif %}  
+
+{% endblock %}

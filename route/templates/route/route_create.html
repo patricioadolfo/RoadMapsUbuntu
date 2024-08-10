@@ -1,0 +1,28 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<h2 class="pb-2 border-bottom">Nuevo Envio</h2>
+
+
+<form  class="px-4 py-3" action="" method="post">
+
+{% csrf_token %}
+
+<div class="form-control">
+    <label for="id_origin">{{form.origin.label_tag}}</label>
+    <div>{{form.origin}}</div>
+
+    <label for="id_destination">{{form.destination.label_tag}}</label>
+    <div>{{form.destination}}</div>
+
+    <label for="id_description">{{form.description.label_tag}}</label>
+    <div>{{form.description}}</div>
+</div>
+<div class="form-control">
+    <input type="submit" value="OK" class="w-100 mb-2 btn btn-lg rounded-3 btn-primary">
+</div>
+</form>
+
+{% endblock %}
+

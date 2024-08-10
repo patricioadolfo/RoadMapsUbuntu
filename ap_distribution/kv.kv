@@ -1,0 +1,395 @@
+<RmScreenManager>
+
+<Progress>
+    id: progress
+    pos_hint: {'center_x': .5, 'center_y': .5}
+    size_hint: None, None
+    size: "49dp", "50dp"
+    md_bg_color: app.theme_cls.transparentColor
+
+    MDCircularProgressIndicator:
+        size_hint: None, None
+        size: "48dp", "48dp"
+        pos_hint: {'center_x': .5, 'center_y': .5}
+
+<Snack>
+    y: dp(14)
+    orientation: "horizontal"
+    pos_hint: {"center_x": .5, "center_y": .5}
+    size_hint_x: .5
+
+    MDSnackbarSupportingText:
+        id: snack_text
+        pos_hint: {"center_x": .5}
+
+<ScanAnalyze>
+<HomeScreen>
+    name: 'homescreen'
+    
+    MDLabel:
+        size_hint_y: .2
+        id: text_home
+        pos_hint: {'center_x': .5,"center_y": .9}
+        bold: True
+        font_style: "Title"
+        halign: "center"
+
+    MDDivider:
+    
+        
+    MDList:
+
+        id: container
+        
+        MDListItem: 
+            
+            MDListItemSupportingText:
+                id: text_prepared
+            MDListItemTrailingIcon:
+                icon: 'package-variant-closed-plus'
+                id: icon_prep
+
+
+        MDListItem: 
+            
+            MDListItemSupportingText:
+                id: text_onroad
+            MDListItemTrailingIcon:
+                icon: 'package-variant-closed-minus'
+                id: icon_onroad
+
+
+<QrScreen>
+    name: 'qrscreen'
+    ScanAnalyze:
+        id: scan
+        aspect_ratio: '16:9'
+        extracted_data: self.parent.got_result
+    MDBoxLayout:
+        orientation: 'horizontal'
+        size_hint: (.7, .2)
+        pos_hint: {'center_x': .5,'center_y': .1}
+        spacing: '15dp'
+                        
+    
+        MDLabel:
+            id: lab_qr
+            text: ''
+            color: 'white'
+            bold: True
+            font_style: "Headline"
+            role: "small"
+            pos_hint: {'center_x': .5,'center_y': .5}
+                            
+                            
+
+<BranchDetails>
+    name: 'branchdetailsscreen'
+    MDBoxLayout:
+        orientation: 'vertical'
+        MDBoxLayout:
+            orientation: 'horizontal'
+            pos_hint: {'center_x': .5, 'center_y': 1}
+            padding:10
+            size_hint_y: .1
+            MDIconButton:
+                icon: 'keyboard-backspace' 
+                pos_hint: {'center_x': .1, 'center_y': .5}
+                on_press: root.back_branchsecreen()
+            MDLabel:
+                id: branch_details_lb
+                text: '' 
+                halign: 'center'
+                font_style: "Title"
+                color: app.theme_cls.primaryColor
+                bold: True       
+                pos_hint: {'center_x': .5, 'center_y': .5}
+
+        MDTabsSecondary:
+            id: tabs
+            pos_hint: {"center_x": .5, "center_y": .9}
+            size_hint_y: .9
+
+            MDDivider:
+
+            MDTabsItem:
+
+                MDTabsItemText:
+                    text: 'Retirar'
+
+
+            
+            MDTabsItem:
+                
+                MDTabsItemText:
+                    text: 'Entregar'
+            
+            MDTabsCarousel:
+                size_hint_y: None
+                size_hint_y: .8
+                
+                MDScrollView:
+                    do_scroll_x: False
+                    MDList:
+                        id: branch_details_p
+
+                MDScrollView:
+                    do_scroll_x: False
+                    MDList:
+                        id: branch_details_c
+        
+
+<BranchScreen>
+    name: 'branchscreen'
+    MDScrollView:
+        do_scroll_x: False
+
+        MDList:
+            id: mdlist
+
+<QrDialog>    
+
+    MDDialogHeadlineText:
+        text: 'Qr'
+
+    MDDialogSupportingText:
+        id: lb_box_card
+
+    MDDialogContentContainer:
+        orientation:'vertical'
+
+        MDDivider:
+
+        MDListItem:
+            id: item_origin_dialog
+            MDListItemLeadingIcon:
+                icon:"map-marker-radius-outline"
+            MDListItemSupportingText:
+                id: origin_dialog
+
+        MDListItem:
+            id: item_destin_dialog
+            MDListItemLeadingIcon:
+                icon:"map-marker-radius"
+            MDListItemSupportingText:
+                id: destin_dialog
+
+        MDDivider:
+
+    MDDialogButtonContainer:
+        spacing:"8dp"
+        MDButton:
+            on_press: 
+                root.close_card()
+            MDButtonText:
+                text:"Cancelar"
+        MDButton:
+            id: btn_rec
+            disabled: True
+            on_press:
+                root.receive_route() 
+            MDButtonIcon:
+                icon: 'package-variant-closed-plus'
+            MDButtonText:
+                text:'Recibir'
+
+
+
+<LoginScreen>
+    name: 'loginscreen'
+
+
+    MDLabel:
+        text: "Login"
+        color: self.theme_cls.primaryColor
+        theme_text_color: "Custom"
+        bold: True
+        font_style: "Title"
+        halign: "center"
+        pos_hint: {'center_y': .9}
+    
+    MDTextField:
+        id: username
+        text: app.user
+        mode: 'filled'
+        size_hint_x: .7
+        pos_hint: {'center_x': .5, 'center_y': .8}
+        on_text: self.text = self.text.replace(" ", "")
+        write_tab: False
+        MDTextFieldHintText:
+            text: 'Usuario'
+        MDTextFieldTrailingIcon:
+            icon: "account"
+
+    MDTextField:
+        id: password
+        text: app.passwd
+        mode: 'filled'
+        password: True
+        size_hint_x: .7
+        pos_hint: {'center_x': .5, 'center_y': .65}
+        on_text: self.text = self.text.replace(" ", "")
+        write_tab: False
+        MDTextFieldHintText:
+            text: 'Contraseña'
+        MDTextFieldTrailingIcon:
+            id: eye_pswd      
+            icon: 'eye-off'
+    
+    MDBoxLayout: 
+        size_hint: .65, None
+        height: "30dp"
+        pos_hint: {'center_x': .5, 'center_y': .55}
+        spacing: '5dp'
+
+        MDCheckbox:
+            id: cb
+            size_hint: None, None
+            width: "30dp"
+            height: "30dp"
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            on_press: 
+                password.password = False  if password.password == True else True
+                eye_pswd.icon = "eye" if eye_pswd.icon == "eye-off" else "eye-off"
+
+        MDLabel:
+            text: "[ref=Contraseña]Contraseña[/ref]"
+            markup: True
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            on_ref_press:
+                cb.active = False if cb.active == True else True
+                password.password = False  if password.password == True else True
+    
+    MDBoxLayout: 
+        size_hint: .7, None
+        height: "30dp"
+        pos_hint: {'center_x': .5, 'center_y': .4}
+        spacing: '15dp'
+
+        MDTextField:
+            id: url
+            text: app.ip
+            mode: 'filled'
+            size_hint_x: .95
+            write_tab: False
+            on_text: self.text = self.text.replace(" ", "")
+            MDTextFieldHintText:
+                text: 'Direccion'
+            MDTextFieldTrailingIcon:   
+                icon: 'ip-network'
+
+        MDIconButton:
+            icon: "login"
+            size_hint: None, None
+            size: "60dp", "60dp"
+            halign: "center"
+            on_press:
+                root.parent.progress(root)
+            on_release:        
+                root.login_a(url, username, password)
+
+
+<BaseMDNavigationItem>
+
+    MDNavigationItemIcon:
+        icon: root.icon
+
+    MDNavigationItemLabel:
+        text: root.text
+
+
+MDBoxLayout:
+    orientation: "vertical"
+    md_bg_color: app.theme_cls.backgroundColor
+    
+    MDTopAppBar:
+        type: "small"
+        id: box_header
+        theme_bg_color: "Custom"
+        id: title_ap
+        md_bg_color: [0.047058823529411764, 0.403921568627451, 0.5019607843137255, 1.0]
+
+        MDTopAppBarLeadingButtonContainer:
+
+            MDActionTopAppBarButton:
+                icon: 'theme-light-dark'
+                on_release: app.switch_theme_style()
+
+        MDTopAppBarTitle:
+            
+            text: "Hoja de Ruta"
+            font_style: "Title"
+            bold: True  
+
+        MDTopAppBarTrailingButtonContainer:
+            pos_hint: {"center_x": 1}
+
+            MDActionTopAppBarButton:
+                icon: "account-circle-outline"
+                id: btn_log
+                on_press: 
+                    root.ids.screen_manager.login_out(btn_log, [home_btn, qr_btn, branch_btn])
+                    root.ids.qr_screen.close_cam()
+ 
+    RmScreenManager:
+        id: screen_manager
+
+        LoginScreen:
+            id: login_screen
+        
+        HomeScreen:
+            id: home_screen
+
+        QrScreen:
+            id: qr_screen
+
+        BranchScreen:
+            id: branch_screen
+
+        BranchDetails:
+            id: branch_details
+
+    MDNavigationBar:
+        radius: 30, 30, 0, 0
+        md_bg_color: app.theme_cls.secondaryContainerColor
+        line_color: [0.047058823529411764, 0.403921568627451, 0.5019607843137255, 1.0]
+
+
+        BaseMDNavigationItem
+            id: home_btn
+            icon: "home"
+            text: "Home"
+            disabled: True
+            on_press: 
+                screen_manager.current= 'homescreen'
+                screen_manager.progress(home_screen)
+            on_release:
+                qr_screen.close_cam()
+                home_screen.get_count()                 
+
+        BaseMDNavigationItem
+            id: qr_btn
+            icon: "qrcode-scan"
+            text: "Qr-Scan"
+            disabled: True
+            on_press:
+                screen_manager.progress(qr_screen)
+                screen_manager.current= 'qrscreen'     
+            on_release:
+                qr_screen.on_focus()
+
+        BaseMDNavigationItem
+            id: branch_btn
+            icon: "map-marker-radius-outline"
+            text: "Sucursales"
+            disabled: True
+            on_press:
+                screen_manager.current= 'branchscreen' 
+            on_release:
+                qr_screen.close_cam()   
+                branch_screen.branch_nodes(branch_details)
+                
+              
+            
+
+

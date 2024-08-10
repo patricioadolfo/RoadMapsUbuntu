@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<h2 class="pb-2 border-bottom">Eliminar Ruta</h2>
+
+<p>¿Esta seguro de eliminar el registro?: {{ route }}?</p>
+
+<form action="" method="POST">
+  {% csrf_token %}
+  <input type="submit" action="" value="Si, Eliminar." />
+</form>
+
+{% endblock %}

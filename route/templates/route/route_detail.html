@@ -1,0 +1,63 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+{% load qr_code %}
+
+<h2 class="pb-2 border-bottom">Detalle envio #{{route.id}}</h2>
+<div class="h-100 p-5  border rounded-3">
+  <div class="row align-items-md-stretch"  id="imp1">
+  
+    <div class="col">  
+
+      <p><strong>Origen: {{ route.origin }}</strong></p> 
+      <p><strong>Destino: {{ route.destination }}</strong></p>
+      <p><strong>Descripcion:  {{ route.description }}</strong></p>
+      <p><strong>Fecha de creacion:  {{ route.preparation_date }}</strong></p> 
+
+    </div>
+  
+    <div class="col-xl-auto">        
+      {% qr_from_data route.id size="m" %}
+
+    </div>  
+  </div>
+  <button type="button" onclick="javascript:imprim1(imp1);">Imprimir</button>
+</div>
+<ul>
+
+</ul>
+<div class="h-100 p-5  border rounded-3">
+  <h5>Instancia</h5>
+  <li><strong>Pedido preparado</strong> </li>
+  <p> El dia {{route.preparation_date}} a las {{route.preparation_time}}, por {{ route.user }}</p>
+  {% for instance in route.routeinstance_set.all %}
+    
+    {% if instance.status == 'c' %}
+      <li><strong>Pedido en camino</strong></li>
+      <p> el dia {{instance.instance_date}} a las {{instance.instance_time}}, por {{ instance.user }}</p>
+    {% endif %}
+      
+    {% if instance.status == 'e' %}
+      <li><strong>Pedido en entregado</strong></li>
+      <p> el dia {{instance.instance_date}} a las {{instance.instance_time}}, por {{ instance.user }}</p>
+    {% endif %}  
+    
+    {% if instance.status == 'r' %}
+      <li><strong>Pedido en recibido</strong></li>
+      <p> el dia {{instance.instance_date}} a las {{instance.instance_time}}, por {{ instance.user }}</p>
+  {% endif %}
+
+  {% endfor %}
+</div>
+<ul></ul>
+
+<div class= "d-grid gap-2">
+  <a class="btn btn-outline-secondary" href='{{route.id}}/edit/' role="button">Actualizar estado &raquo;</a>
+
+  <a class="btn btn-primary" href='{{route.id}}/delete/' role="button">Eliminar registro &raquo;</a>
+</div>
+ 
+
+{% endblock %}
+

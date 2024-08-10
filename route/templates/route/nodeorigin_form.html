@@ -1,0 +1,27 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+  <h2 class="pb-2 border-bottom">Nuevo Origen</h2>
+
+
+  <form  class="px-4 py-3" action="" method="post">
+
+    {% csrf_token %}
+
+    <div class="form-control">
+      <label for="id_name">{{form.name.label_tag}}</label>
+      <div>{{form.name}}</div>
+
+      <label for="id_address">{{form.address.label_tag}}</label>
+      <div>{{form.address}}</div>
+
+      <label for="id_address">{{form.phoneNumber.label_tag}}</label>
+      <div>{{form.phoneNumber}}</div>
+    </div>
+    <div class="form-control">
+      <input type="submit" value="OK" class="w-100 mb-2 btn btn-lg rounded-3 btn-primary">
+    </div>
+  </form>
+{% endblock %}
+

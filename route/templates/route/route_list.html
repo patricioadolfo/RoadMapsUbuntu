@@ -1,0 +1,128 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<div class="row align-items-md-stretch">
+  
+  <div>
+
+      <h2 class="pb-2 border-bottom">Listado de rutas</h2>
+      {% if route_list %}
+
+      <div class="bd-example-snippet bd-code-snippet">
+        <div class="bd-example m-0 border-0">
+          
+            <table class="table table-hover">
+              <thead>
+              <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Usuario</th>
+                <th scope="col">Origen</th>
+                <th scope="col">Destino</th>
+              </tr>
+              </thead>
+              <tbody>
+                {% for route in route_list %}
+                  
+                  {% if route.status == 'p'%}
+                    <tr class="table-danger">
+                  {% elif route.status == 'c'%} 
+                    <tr class="table-warning">
+                  {% else %} 
+                    <tr class="table-success">
+                  {% endif %}
+                      <th scope="row">
+                        <a class="nav-link d-flex align-items-center gap-2" href="{{ route.id }}">{{ route.id }}</a>
+                      </th>
+                      <td>
+                        <a class="nav-link d-flex align-items-center gap-2" href="{{ route.id }}">{{route.preparation_date}}</a>
+                      </td>
+                      <td>
+                        <a class="nav-link d-flex align-items-center gap-2" href="{{ route.id }}">{{route.user}}</a>
+                      </td>
+                      <td>
+                        <a class="nav-link d-flex align-items-center gap-2" href="{{ route.id }}">{{route.origin}}</a>
+                      </td>
+                      <td>
+                        <a class="nav-link d-flex align-items-center gap-2" href="{{ route.id }}">{{route.destination}}</a>
+                      </td>
+                  </tr>
+                
+                {% endfor %}
+          {% else %}  
+              <p>No hay Nodos dispoonibles.</p>
+          {% endif %}
+              </tbody>
+              
+            </table>
+              
+          </div>
+        </div>
+      <div>
+        <span class="badge bg-danger-subtle border border-danger-subtle text-danger-emphasis rounded-pill">Preparado</span>
+        <span class="badge bg-warning-subtle border border-warning-subtle text-warning-emphasis rounded-pill">En camino</span>
+        <span class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill">Recibido</span>
+        <ul></ul>
+        <form class="d-flex" role="search">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+        <ul></ul>
+        <span>
+          {% block pagination %}
+          {% if is_paginated %}
+
+          <div class="bd-example-snippet bd-code-snippet ">
+            <div class="bd-example m-0 border-0">
+              
+                <nav aria-label="Standard pagination example">
+                  <ul class="pagination ">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                      <a class="page-link" href="{{ request.path }}?page={{ page_obj.previous_page_number }}"><<</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="{{ request.path }}?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                      <a class="page-link"><<</a>
+                    </li>
+                    {% endif %}
+
+                    <li class="page-item">
+                      <a class="page-link" href="#">{{ page_obj.number }}</a>
+                    </li>
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                      <a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}">>></a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                      <a class="page-link">>></a>
+                    </li>
+                    {% endif %}
+                  </ul>
+                </nav>
+                  
+            </div>
+          </div>
+          {% endif %}
+          {% endblock %}
+        </span>
+      </div>        
+    
+    </div>
+</div>
+
+<ul></ul>
+
+<div class= "row align-items-md-stretch">
+  <a class="btn btn-lg btn-primary" href="{% url 'route-create' %}" role="button">Nueva Ruta &raquo;</a>
+</div>
+{% endblock %}
+

@@ -1,0 +1,105 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<div class="row align-items-md-stretch">
+  
+    <div>
+
+      <h2 class="pb-2 border-bottom">Destinos disponibles para realizar sus envios</h2>
+
+
+      {% if nodedestination_list %}
+  
+        <div class="bd-example-snippet bd-code-snippet">
+          <div class="bd-example m-0 border-0">
+            
+              <table class="table table-hover">
+                <thead>
+                <tr>
+                  <th scope="col">Origen</th>
+                  <th scope="col">Direccion</th>
+                  <th scope="col">Telefono</th>
+                </tr>
+                </thead>
+                <tbody>
+                  {% for node in nodedestination_list %}
+                  <tr class="table-success">
+                    <th scope="row">{{ node.name }}</th>
+                    <td>{{node.address}}</td>
+                    <td>{{node.phoneNumber}}</td>
+                  </tr>
+                  {% endfor %}
+                  {% else %}  
+                  <p>No hay Nodos dispoonibles.</p>
+                  {% endif %}
+                </tbody>
+                
+              </table>
+                
+            </div>
+          </div>
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+      
+      <ul></ul>
+      
+      <span>
+        {% block pagination %}
+        {% if is_paginated %}
+
+        <div class="bd-example-snippet bd-code-snippet ">
+          <div class="bd-example m-0 border-0">
+            
+              <nav aria-label="Standard pagination example">
+                <ul class="pagination ">
+                  {% if page_obj.has_previous %}
+                  <li class="page-item">
+                    <a class="page-link" href="{{ request.path }}?page={{ page_obj.previous_page_number }}"><<</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="{{ request.path }}?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+                  </li>
+                  {% else %}
+                  <li class="page-item disabled">
+                    <a class="page-link"><<</a>
+                  </li>
+                  {% endif %}
+
+                  <li class="page-item">
+                    <a class="page-link" href="#">{{ page_obj.number }}</a>
+                  </li>
+                  {% if page_obj.has_next %}
+                  <li class="page-item">
+                    <a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}">>></a>
+                  </li>
+                  {% else %}
+                  <li class="page-item disabled">
+                    <a class="page-link">>></a>
+                  </li>
+                  {% endif %}
+                </ul>
+              </nav>
+                
+          </div>
+        </div>
+        {% endif %}
+        {% endblock %}
+      </span>
+    
+    </div> 
+</div>
+
+<ul></ul>
+
+<div class= "d-grid gap-2">
+  <a class="btn btn-primary" href="create/" role="button">Nuevo destino &raquo;</a>
+</div>
+
+
+{% endblock %}

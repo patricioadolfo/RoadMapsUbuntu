@@ -86,7 +86,7 @@ class Route(models.Model):
     status = models.CharField("Estado", max_length=1, choices=ROUTE_STATUS, blank=True, default='p',)
     
     class Meta:
-        ordering = ["-preparation_date"]
+        ordering = ["-id"]
 
     def __str__(self):
         """ 

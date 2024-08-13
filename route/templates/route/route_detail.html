@@ -4,16 +4,16 @@
 
 {% load qr_code %}
 
-<h2 class="pb-2 border-bottom">Detalle envio #{{route.id}}</h2>
+<h2 class="pb-2 border-bottom">Detalle del envio #{{route.id}}#</h2>
 <div class="h-100 p-5  border rounded-3">
   <div class="row align-items-md-stretch"  id="imp1">
   
     <div class="col">  
 
-      <p><strong>Origen: {{ route.origin }}</strong></p> 
-      <p><strong>Destino: {{ route.destination }}</strong></p>
-      <p><strong>Descripcion:  {{ route.description }}</strong></p>
-      <p><strong>Fecha de creacion:  {{ route.preparation_date }}</strong></p> 
+      <p><strong>Desde: {{ route.origin }}</strong></p> 
+      <p><strong>Para: {{ route.destination }}</strong></p>
+      <p><strong>Descripción:  {{ route.description }}</strong></p>
+      <p><strong>Fecha de preparación:  {{ route.preparation_date }}</strong></p> 
 
     </div>
   
@@ -22,7 +22,7 @@
 
     </div>  
   </div>
-  <button type="button" onclick="javascript:imprim1(imp1);">Imprimir</button>
+  <button class="btn btn-primary" type="button" onclick="javascript:imprim1(imp1);">Imprimir</button>
 </div>
 <ul>
 

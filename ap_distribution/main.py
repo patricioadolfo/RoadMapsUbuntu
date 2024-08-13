@@ -18,6 +18,7 @@ import models
 #from android.permissions import request_permissions, Permission
 
 #request_permissions([Permission.CAMERA, Permission.INTERNET])
+
 class Progress(MDFloatLayout):
     pass
 

@@ -34,7 +34,7 @@ DEBUG = True
 #DEBUG = ENVIRONMENT.get('DEBUG') 
 
 ALLOWED_HOSTS = ['192.168.0.5']
-#ALLOWED_HOSTS = ['10.0.10.112']
+#ALLOWED_HOSTS = ['10.0.10.83']
 #ALLOWED_HOSTS = ['*']# Para Prueba de produccion
 
 DOCS_ROOT = os.path.join(BASE_DIR, 'docs/build/html')

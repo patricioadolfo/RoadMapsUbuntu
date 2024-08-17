@@ -2,18 +2,47 @@ from kivymd.uix.screen import MDScreen
 from kivy.storage.jsonstore import JsonStore
 from models import deco
 from kivy.clock import mainthread
+from kivymd.uix.dialog import MDDialog
+
+
+class DialogIp(MDDialog):
+    
+    @mainthread
+    def open_dilog(self, store):
+
+        self.store= store
+
+        self.open()
+
+    @mainthread
+    def close_card(self,):
+        
+        self.dismiss()     
+
+    @deco
+    def save_ip(self, url):
+        
+        try:
+            url= url._get_text()
+
+            self.store.put('url', ip= url)
+        
+        except:
+            
+            pass
 
 
 class LoginScreen(MDScreen):
     
     store = JsonStore('load.json') 
     
-    def save_log(self, username, password, url):
-
+    @deco
+    def save_log(self, username, password):
+        
         try:
-            
-            self.store.put('log', name= username, pswd= password, ip= url)
-            
+
+            self.store.put('log', name= username, pswd= password)
+        
         except:
             
             pass
@@ -34,11 +63,11 @@ class LoginScreen(MDScreen):
         self.parent.parent.ids.home_screen.order_list()  
     
     @deco    
-    def login_a(self, url, username, password):
+    def login_a(self, username, password):
 
         try:
            
-            url= url._get_text()
+            url= self.store.get('url')['ip']
                 
             username= username._get_text()
                 
@@ -61,16 +90,18 @@ class LoginScreen(MDScreen):
                 pass
             
             self.login_b()
-            
-            self.parent.stop_progres(self)
         
         except:
                 
-            self.children[-1].text= 'Login Incorrecto'
+            self.parent.go_snack('Login incorrecto')
             
-            self.parent.stop_progres(self)
+        self.parent.stop_progres(self)
 
+    def open_ipdialog(self):
+        
+        dialog= DialogIp()
 
+        dialog.open_dilog(self.store)
 
 
 

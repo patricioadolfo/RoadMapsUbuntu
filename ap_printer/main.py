@@ -24,3 +24,8 @@ class AppPrinter(MDApp):
         return Builder.load_file('kv.kv')
     
 AppPrinter().run()
+
+
+
+# para .exe
+# py -3.10 -m PyInstaller --paths C:\Users\Patricio\AppData\Roaming\Python\Python310\site-packages\pywin32_system32  --onefile main.py

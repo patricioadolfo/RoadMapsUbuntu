@@ -10,7 +10,7 @@ from kivymd.uix.floatlayout import MDFloatLayout
 from kivy.clock import mainthread
 
 from scan import QrScreen, QrDialog, ScanAnalyze
-from login import LoginScreen
+from login import LoginScreen, DialogIp
 from branch import BranchScreen, BranchDetails
 from home import HomeScreen
 import models  
@@ -30,7 +30,6 @@ class BaseMDNavigationItem(MDNavigationItem):
     icon = StringProperty()
     text = StringProperty()
  
-
 class RmScreenManager(MDScreenManager):
     
     @models.deco
@@ -90,8 +89,7 @@ class RoadMapsApp(MDApp):
     icon= 'truck.png'       
     
     store = JsonStore('load.json')
-    
-    
+      
     def load_log(self,):
         
         try:
@@ -100,19 +98,23 @@ class RoadMapsApp(MDApp):
             
             self.passwd= self.store.get('log')['pswd']
             
-            self.ip= self.store.get('log')['ip']
-        
         except:
             
             self.user = ''   
             
             self.passwd= ''
+        
+        try:
             
-            self.ip= ''
+            self.ip= self.store.get('url')['ip']
+        
+        except:    
+            
+                self.ip= ''
     
     def build(self):
 
-        self.theme_cls.primary_palette = "Aliceblue"
+        self.theme_cls.primary_palette = "Blue"
         
         self.set_bars_colors()
        
@@ -129,18 +131,20 @@ class RoadMapsApp(MDApp):
         if self.theme_cls.theme_style == "Dark":
             
             self.theme_cls.theme_style= 'Light'
-            self.root.ids.title_ap.md_bg_color=  [0.047058823529411764, 0.403921568627451, 0.5019607843137255, 1.0]
-        
+            self.root.ids.title_ap.md_bg_color= [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0]
+            self.root.ids.title_text.color= [0.8745098039215686, 0.8901960784313725, 0.9058823529411765, 1.0]
+            self.root.ids.btn_log.color= [0.8745098039215686, 0.8901960784313725, 0.9058823529411765, 1.0]
+            self.root.ids.switch_theme.color= [0.8745098039215686, 0.8901960784313725, 0.9058823529411765, 1.0]
         else:
             self.theme_cls.theme_style = "Dark"
-            self.root.ids.title_ap.md_bg_color=  [0.047058823529411764, 0.403921568627451, 0.5019607843137255, 1.0]
-           
+            self.root.ids.title_ap.md_bg_color=  [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0]
+  
     def set_bars_colors(self):
         
         set_bars_colors(
-            [0.047058823529411764, 0.403921568627451, 0.5019607843137255, 1.0],  # status bar color
-            [0.047058823529411764, 0.403921568627451, 0.5019607843137255, 1.0],  # navigation bar color
-            "Dark",      # icons color of status bar
+            [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0],  # status bar color
+            [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0],  # navigation bar color
+            "Light",      # icons color of status bar
         )
     
 if __name__ == "__main__":

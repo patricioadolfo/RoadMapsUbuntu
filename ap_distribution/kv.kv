@@ -1,5 +1,5 @@
 <RmScreenManager>
-
+<IconPasword>
 <Progress>
     id: progress
     pos_hint: {'center_x': .5, 'center_y': .5}
@@ -116,9 +116,7 @@
 
                 MDTabsItemText:
                     text: 'Retirar'
-
-
-            
+       
             MDTabsItem:
                 
                 MDTabsItemText:
@@ -195,81 +193,15 @@
 
 
 
-<LoginScreen>
-    name: 'loginscreen'
-
-
-    MDLabel:
-        text: "Login"
-        color: self.theme_cls.primaryColor
-        theme_text_color: "Custom"
-        bold: True
-        font_style: "Title"
-        halign: "center"
-        pos_hint: {'center_y': .9}
-    
-    MDTextField:
-        id: username
-        text: app.user
-        mode: 'filled'
-        size_hint_x: .7
-        pos_hint: {'center_x': .5, 'center_y': .8}
-        on_text: self.text = self.text.replace(" ", "")
-        write_tab: False
-        MDTextFieldHintText:
-            text: 'Usuario'
-        MDTextFieldTrailingIcon:
-            icon: "account"
-
-    MDTextField:
-        id: password
-        text: app.passwd
-        mode: 'filled'
-        password: True
-        size_hint_x: .7
-        pos_hint: {'center_x': .5, 'center_y': .65}
-        on_text: self.text = self.text.replace(" ", "")
-        write_tab: False
-        MDTextFieldHintText:
-            text: 'Contraseña'
-        MDTextFieldTrailingIcon:
-            id: eye_pswd      
-            icon: 'eye-off'
-    
-    MDBoxLayout: 
-        size_hint: .65, None
-        height: "30dp"
-        pos_hint: {'center_x': .5, 'center_y': .55}
-        spacing: '5dp'
-
-        MDCheckbox:
-            id: cb
-            size_hint: None, None
-            width: "30dp"
-            height: "30dp"
-            pos_hint: {'center_x': .5, 'center_y': .5}
-            on_press: 
-                password.password = False  if password.password == True else True
-                eye_pswd.icon = "eye" if eye_pswd.icon == "eye-off" else "eye-off"
-
-        MDLabel:
-            text: "[ref=Contraseña]Contraseña[/ref]"
-            markup: True
-            pos_hint: {'center_x': .5, 'center_y': .5}
-            on_ref_press:
-                cb.active = False if cb.active == True else True
-                password.password = False  if password.password == True else True
-    
-    MDBoxLayout: 
-        size_hint: .7, None
-        height: "30dp"
-        pos_hint: {'center_x': .5, 'center_y': .4}
-        spacing: '15dp'
+<DialogIp>
+    id: dialog_ip
+    MDDialogContentContainer:
 
         MDTextField:
             id: url
             text: app.ip
-            mode: 'filled'
+            mode: 'outlined'
+            radius: 0, 40, 40, 40
             size_hint_x: .95
             write_tab: False
             on_text: self.text = self.text.replace(" ", "")
@@ -278,16 +210,89 @@
             MDTextFieldTrailingIcon:   
                 icon: 'ip-network'
 
-        MDIconButton:
-            icon: "login"
-            size_hint: None, None
-            size: "60dp", "60dp"
-            halign: "center"
+    MDDialogButtonContainer:
+        spacing:"8dp"
+        MDButton:
+            on_press: 
+                root.close_card()
+            MDButtonText:
+                text:"Cerrar"
+        
+        MDButton:
             on_press:
-                root.parent.progress(root)
-            on_release:        
-                root.login_a(url, username, password)
+                root.save_ip(url)
+            MDButtonText:
+                text:'Guardar'
+<LoginScreen>
+    name: 'loginscreen'
+    
+    MDTextField:
+        id: username
+        text: app.user
+        mode: 'outlined'
+        size_hint_x: .7
+        pos_hint: {'center_x': .5, 'center_y': .75}
+        on_text: self.text = self.text.replace(" ", "")
+        write_tab: False
+        radius: 0, 40, 40, 40
+        MDTextFieldHintText:
+            text: 'Usuario'
+        MDTextFieldTrailingIcon:
+            icon: "account"
+            
+    MDTextField:
+        id: password
+        text: app.passwd
+        mode: 'outlined'
+        password: True
+        size_hint_x: .7
+        radius: 0, 40, 40, 40
+        pos_hint: {'center_x': .5, 'center_y': .60}
+        on_text: self.text = self.text.replace(" ", "")
+        write_tab: False
+        MDTextFieldHintText:
+            text: 'Contraseña'
+        MDTextFieldTrailingIcon:
+            id: eye_pswd      
+            icon: 'eye-off'
 
+    MDCheckbox:
+        id: cb
+        size_hint: None, None
+        width: "30dp"
+        height: "30dp"
+        pos_hint: {'center_x': .8, 'center_y': .5}
+        on_press: 
+            password.password = False  if password.password == True else True
+            eye_pswd.icon = "eye" if eye_pswd.icon == "eye-off" else "eye-off"        
+
+    MDButton:
+        theme_width: "Custom"
+        height: "56dp"
+        size_hint_x: .7
+        pos_hint: {'center_x': .5, 'center_y': .4}
+        style: "outlined"
+        on_press:
+            root.parent.progress(root)
+        on_release:        
+            root.login_a(username, password)
+        
+        MDButtonText:
+            id: text
+            text:'Login'
+            pos_hint: {"center_x": .5, "center_y": .5}
+        
+        MDButtonIcon:
+            icon: 'login'
+            x: text.x - (self.width + dp(10))
+    
+    MDFabButton:
+        style:'standard' 
+        icon: 'ip-network'
+        color_map: 'surface'
+        pos_hint: {"center_x": .9, 'center_y': .1}
+        line_color: app.theme_cls.primaryColor
+        on_press: root.open_ipdialog()
 
 <BaseMDNavigationItem>
 
@@ -307,16 +312,18 @@ MDBoxLayout:
         id: box_header
         theme_bg_color: "Custom"
         id: title_ap
-        md_bg_color: [0.047058823529411764, 0.403921568627451, 0.5019607843137255, 1.0]
-
+        md_bg_color: [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0]
+           
         MDTopAppBarLeadingButtonContainer:
 
             MDActionTopAppBarButton:
+                id: switch_theme
                 icon: 'theme-light-dark'
                 on_release: app.switch_theme_style()
 
         MDTopAppBarTitle:
             
+            id: title_text
             text: "Hoja de Ruta"
             font_style: "Title"
             bold: True  
@@ -350,9 +357,9 @@ MDBoxLayout:
             id: branch_details
 
     MDNavigationBar:
-        radius: 30, 30, 0, 0
+        radius: 50, 50, 0, 0
         md_bg_color: app.theme_cls.secondaryContainerColor
-        line_color: [0.047058823529411764, 0.403921568627451, 0.5019607843137255, 1.0]
+        line_color: self.theme_cls.primaryColor
 
 
         BaseMDNavigationItem

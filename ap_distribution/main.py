@@ -9,10 +9,6 @@ from kivymd.uix.snackbar import MDSnackbar
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivy.clock import mainthread
 
-from scan import QrScreen, QrDialog, ScanAnalyze
-from login import LoginScreen, DialogIp
-from branch import BranchScreen, BranchDetails
-from home import HomeScreen
 import models  
 
 #from android.permissions import request_permissions, Permission

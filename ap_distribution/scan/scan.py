@@ -109,10 +109,12 @@ class QrScreen(MDScreen):
     @mainthread    
     def focus(self,):
         
+        self.ids.scan.enable_analyze_pixels= True
+
+        self.ids.scan.connect_camera(enable_analyze_pixels = True )
+
         self.parent.stop_progres(self)
         
-        self.ids.scan.connect_camera(enable_analyze_pixels = True ,default_zoom=0.0)
-
     @deco
     def on_focus(self,):
         

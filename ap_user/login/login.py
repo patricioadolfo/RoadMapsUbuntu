@@ -75,7 +75,7 @@ class LoginScreen(MDScreen):
             
             self.parent.user.log(url, username, password)
                                
-            self.save_log(username, password, url)
+            self.save_log(username, password)
             
             self.parent.on_road= self.parent.user.view_road('?q='+ str({"status":"c", "origin": self.parent.user.perfil}).replace("'",'"').replace(' ',''))
 

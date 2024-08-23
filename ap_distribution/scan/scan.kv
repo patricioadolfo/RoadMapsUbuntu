@@ -1,0 +1,68 @@
+<ScanAnalyze>
+<QrScreen>
+    name: 'qrscreen'
+    ScanAnalyze:
+        id: scan
+        aspect_ratio: '16:9'
+        extracted_data: self.parent.got_result
+    MDBoxLayout:
+        orientation: 'horizontal'
+        size_hint: (.7, .2)
+        pos_hint: {'center_x': .5,'center_y': .1}
+        spacing: '15dp'
+                        
+    
+        MDLabel:
+            id: lab_qr
+            text: ''
+            color: 'white'
+            bold: True
+            font_style: "Headline"
+            role: "small"
+            pos_hint: {'center_x': .5,'center_y': .5}
+
+<QrDialog>
+    auto_dismiss: False
+    MDDialogHeadlineText:
+        text: 'Qr'
+
+    MDDialogSupportingText:
+        id: lb_box_card
+
+    MDDialogContentContainer:
+        orientation:'vertical'
+
+        MDDivider:
+
+        MDListItem:
+            id: item_origin_dialog
+            MDListItemLeadingIcon:
+                icon:"map-marker-radius-outline"
+            MDListItemSupportingText:
+                id: origin_dialog
+
+        MDListItem:
+            id: item_destin_dialog
+            MDListItemLeadingIcon:
+                icon:"map-marker-radius"
+            MDListItemSupportingText:
+                id: destin_dialog
+
+        MDDivider:
+
+    MDDialogButtonContainer:
+        spacing:"8dp"
+        MDButton:
+            on_press: 
+                root.close_card()
+            MDButtonText:
+                text:"Cancelar"
+        MDButton:
+            id: btn_rec
+            disabled: True
+            on_press:
+                root.receive_route() 
+            MDButtonIcon:
+                icon: 'package-variant-closed-plus'
+            MDButtonText:
+                text:'Recibir'

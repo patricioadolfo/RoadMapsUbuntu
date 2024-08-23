@@ -9,12 +9,7 @@ from kivymd.uix.snackbar import MDSnackbar
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivy.clock import mainthread
 
-from scan import QrScreen, QrDialog, ScanAnalyze, QrPrinter, Check
-from login import LoginScreen, DialogIp
-from orders import OrdersScreen, OrderCreate
-from home import HomeScreen
 import models   
-
 
 #from android.permissions import request_permissions, Permission
     
@@ -133,6 +128,8 @@ class RoadMapsApp(MDApp):
         self.load_log()
  
         self.theme_cls.primary_hue = "A700"
+
+        self.theme_cls.primaryColor= [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0]
            
         return Builder.load_file('kv.kv')
     
@@ -141,12 +138,13 @@ class RoadMapsApp(MDApp):
         if self.theme_cls.theme_style == "Dark":
             
             self.theme_cls.theme_style= 'Light'
-            self.root.ids.title_ap.md_bg_color= [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0]
+            self.theme_cls.primaryColor= [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0]
             self.root.ids.title_text.color= [0.8745098039215686, 0.8901960784313725, 0.9058823529411765, 1.0]
             self.root.ids.btn_log.color= [0.8745098039215686, 0.8901960784313725, 0.9058823529411765, 1.0]
             self.root.ids.switch_theme.color= [0.8745098039215686, 0.8901960784313725, 0.9058823529411765, 1.0]
         else:
             self.theme_cls.theme_style = "Dark"
+            self.theme_cls.primaryColor= [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0]
             self.root.ids.title_ap.md_bg_color=  [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0]
             
     def set_bars_colors(self):

@@ -1,3 +1,4 @@
+
 <RmScreenManager>
 <IconPasword>
 <Progress>
@@ -116,12 +117,13 @@
 
                 MDTabsItemText:
                     text: 'Retirar'
+                    bold: True
        
             MDTabsItem:
                 
                 MDTabsItemText:
                     text: 'Entregar'
-            
+                    bold: True
             MDTabsCarousel:
                 size_hint_y: None
                 size_hint_y: .8
@@ -146,7 +148,7 @@
             id: mdlist
 
 <QrDialog>    
-
+    auto_dismiss: False
     MDDialogHeadlineText:
         text: 'Qr'
 
@@ -195,6 +197,7 @@
 
 <DialogIp>
     id: dialog_ip
+    auto_dismiss: False
     MDDialogContentContainer:
 
         MDTextField:
@@ -311,8 +314,7 @@ MDBoxLayout:
         type: "small"
         id: box_header
         theme_bg_color: "Custom"
-        id: title_ap
-        md_bg_color: [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0]
+        md_bg_color: app.theme_cls.primaryColor
            
         MDTopAppBarLeadingButtonContainer:
 

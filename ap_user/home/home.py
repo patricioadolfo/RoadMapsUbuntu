@@ -37,7 +37,7 @@ class HomeScreen(MDScreen):
                 self.ids.mdlist.add_widget(
                     MDListItem(
                         MDListItemHeadlineText(
-                            text= 'Mis pedidos EN CAMINO',
+                            text= 'PEDIDOS EN CAMINO',
                             halign= "center"
                             
                             ), 
@@ -59,7 +59,7 @@ class HomeScreen(MDScreen):
                 self.ids.mdlist.add_widget(
                     MDListItem(
                         MDListItemHeadlineText(
-                            text= 'Mis pedidos PREPARADOS',
+                            text= 'PEDIDOS PREPARADOS',
                             halign= "center"
                             ), 
                         MDListItemTrailingIcon(

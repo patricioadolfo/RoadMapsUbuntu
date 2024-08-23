@@ -1,0 +1,73 @@
+<OrdersScreen>
+    name: 'ordersscreen'
+ 
+    MDScrollView:
+        do_scroll_x: False
+
+        MDList:
+            id: mdlist
+    
+    MDExtendedFabButton:
+        style:'large' 
+        color_map: 'secondary'
+        pos_hint: {"center_x": .8, "center_y": .1}
+        fab_state: "expand"
+        line_color: app.theme_cls.primaryColor
+        on_press: 
+            root.parent.current= 'ordercreatescreen'
+        MDExtendedFabButtonIcon:
+            icon: "plus"
+
+        MDExtendedFabButtonText:
+            text: "Nuevo envío"
+
+<OrderCreate>
+    name: 'ordercreatescreen'
+    MDBoxLayout:
+        orientation: 'vertical'
+        MDBoxLayout:
+            orientation: 'horizontal'
+            padding:10
+            size_hint_y: .1
+            MDIconButton:
+                icon: 'keyboard-backspace' 
+                pos_hint: {'center_x': .1, 'center_y': .5}
+                on_press: 
+                    root.parent.current= 'ordersscreen'
+            MDLabel:
+                text: 'Nuevo envio' 
+                halign: 'center'
+                font_style: "Title"
+                color: app.theme_cls.primaryColor
+                bold: True       
+                pos_hint: {'center_x': .5, 'center_y': .5}
+
+        MDDivider:
+        
+        MDBoxLayout:
+            orientation: 'vertical'
+            padding:20
+            size_hint_y: .9
+
+            MDTextField:
+                id: text_detail
+                mode: "outlined"
+                max_height: "200dp"
+                multiline: True
+                size_hint_x: .8
+                radius: 0, 40, 40, 40
+                pos_hint: {'center_x': .5, 'center_y': .5 }
+                MDTextFieldHelperText:
+                    text: "Detalle"
+                    mode: "persistent"
+                MDTextFieldMaxLengthText:
+                    max_text_length: 10
+
+            MDDropDownItem:
+                on_release: root.open_menu(self)
+                size_hint_x: .2
+                pos_hint: {'center_x': .1, 'center_y': .5}
+                
+                MDDropDownItemText:
+                    id: drop_text
+                    text: 'Destino'

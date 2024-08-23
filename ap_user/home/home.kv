@@ -1,0 +1,21 @@
+<HomeScreen>
+    name: 'homescreen'
+    
+    MDLabel:
+        size_hint_y: .15
+        id: text_home
+        pos_hint: {'center_x': .2,"center_y": .9}
+        bold: True
+        font_style: "Title"
+        halign: "center"
+
+    MDDivider:
+    
+    MDBoxLayout:
+        size_hint_y: .85
+
+        MDScrollView:
+            do_scroll_x: False
+
+            MDList:
+                id: mdlist

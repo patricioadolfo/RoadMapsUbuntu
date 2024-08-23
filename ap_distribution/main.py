@@ -121,7 +121,9 @@ class RoadMapsApp(MDApp):
         self.theme_cls.theme_style = "Dark"    
  
         self.theme_cls.primary_hue = "A700"
-        
+
+        self.theme_cls.primaryColor= [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0]
+
         self.load_log()
 
         return Builder.load_file('kv.kv')
@@ -131,14 +133,18 @@ class RoadMapsApp(MDApp):
         if self.theme_cls.theme_style == "Dark":
             
             self.theme_cls.theme_style= 'Light'
-            self.root.ids.title_ap.md_bg_color= [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0]
+            self.theme_cls.primaryColor= [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0]
+            
             self.root.ids.title_text.color= [0.8745098039215686, 0.8901960784313725, 0.9058823529411765, 1.0]
             self.root.ids.btn_log.color= [0.8745098039215686, 0.8901960784313725, 0.9058823529411765, 1.0]
             self.root.ids.switch_theme.color= [0.8745098039215686, 0.8901960784313725, 0.9058823529411765, 1.0]
+            
         else:
+            
             self.theme_cls.theme_style = "Dark"
-            self.root.ids.title_ap.md_bg_color=  [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0]
-  
+            self.theme_cls.primaryColor= [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0]
+         
+         
     def set_bars_colors(self):
         
         set_bars_colors(

@@ -1,1 +1,4 @@
-{}
+{
+    "kvlang.pythonPath": "python3",
+    "materialkv.pythonFile": "main.py"
+}

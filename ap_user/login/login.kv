@@ -1,0 +1,102 @@
+<DialogIp>
+    id: dialog_ip
+    auto_dismiss: False
+    MDDialogContentContainer:
+
+        MDTextField:
+            id: url
+            text: app.ip
+            mode: 'outlined'
+            radius: 0, 40, 40, 40
+            size_hint_x: .95
+            write_tab: False
+            on_text: self.text = self.text.replace(" ", "")
+            MDTextFieldHintText:
+                text: 'Direccion'
+            MDTextFieldTrailingIcon:   
+                icon: 'ip-network'
+
+    MDDialogButtonContainer:
+        spacing:"8dp"
+        MDButton:
+            on_press: 
+                root.close_card()
+            MDButtonText:
+                text:"Cerrar"
+        
+        MDButton:
+            on_press:
+                root.save_ip(url)
+            MDButtonText:
+                text:'Guardar'
+
+<LoginScreen>
+    name: 'loginscreen'
+    
+    MDTextField:
+        id: username
+        text: app.user
+        mode: 'outlined'
+        size_hint_x: .7
+        pos_hint: {'center_x': .5, 'center_y': .75}
+        on_text: self.text = self.text.replace(" ", "")
+        write_tab: False
+        radius: 0, 40, 40, 40
+        MDTextFieldHintText:
+            text: 'Usuario'
+        MDTextFieldTrailingIcon:
+            icon: "account"
+            
+    MDTextField:
+        id: password
+        text: app.passwd
+        mode: 'outlined'
+        password: True
+        size_hint_x: .7
+        radius: 0, 40, 40, 40
+        pos_hint: {'center_x': .5, 'center_y': .60}
+        on_text: self.text = self.text.replace(" ", "")
+        write_tab: False
+        MDTextFieldHintText:
+            text: 'Contraseña'
+        MDTextFieldTrailingIcon:
+            id: eye_pswd      
+            icon: 'eye-off'
+
+    MDCheckbox:
+        id: cb
+        size_hint: None, None
+        width: "30dp"
+        height: "30dp"
+        pos_hint: {'center_x': .8, 'center_y': .5}
+        on_press: 
+            password.password = False  if password.password == True else True
+            eye_pswd.icon = "eye" if eye_pswd.icon == "eye-off" else "eye-off"        
+
+    MDButton:
+        theme_width: "Custom"
+        height: "56dp"
+        size_hint_x: .7
+        pos_hint: {'center_x': .5, 'center_y': .4}
+        style: "outlined"
+        on_press:
+            root.parent.progress(root)
+        on_release:        
+            root.login_a(username, password)
+        
+        MDButtonText:
+            id: text
+            text:'Login'
+            pos_hint: {"center_x": .5, "center_y": .5}
+        
+        MDButtonIcon:
+            icon: 'login'
+            x: text.x - (self.width + dp(10))
+    
+    MDFabButton:
+        style:'standard' 
+        icon: 'ip-network'
+        color_map: 'surface'
+        pos_hint: {"center_x": .9, 'center_y': .1}
+        line_color: app.theme_cls.primaryColor
+        on_press: root.open_ipdialog()

@@ -2,14 +2,15 @@ from kivymd.uix.screen import MDScreen
 from models import deco
 from kivy.clock import mainthread
 
-from kivymd.uix.badge import MDBadge
-from kivymd.uix.list import MDListItem, MDListItemLeadingIcon, MDListItemHeadlineText, MDListItemTertiaryText, MDListItemTrailingIcon
-from kivymd.uix.divider import MDDivider
+from kivymd.uix.list import MDListItem, MDListItemLeadingIcon, MDListItemTertiaryText
+
 
        
 class HomeScreen(MDScreen):
     
-    def order_item(self, order, list):
+    dict_query= {}
+
+    def order_item(self, order):            
            
         item= MDListItem(
                         MDListItemLeadingIcon(
@@ -21,88 +22,62 @@ class HomeScreen(MDScreen):
                         ids= order,
 
                     )
-        list.add_widget(item)
-    
-    @mainthread        
-    def order_list(self,):
-        
-        self.ids.text_home.text= 'Hola '+ self.parent.user.id_user['username'] 
-               
-        self.ids.mdlist.clear_widgets(self.ids.mdlist.children)
-        
-        try:
-        
-            if self.parent.user.id_user != {}:
-                        
-                self.ids.mdlist.add_widget(
-                    MDListItem(
-                        MDListItemHeadlineText(
-                            text= 'PEDIDOS EN CAMINO',
-                            halign= "center"
-                            
-                            ), 
-                        MDListItemTrailingIcon(
-                            MDBadge(
-                            text= str(self.parent.on_road['count'])  
-                            ),
-                            icon= 'information-variant',
-                        )
-                    )
-                )
+        self.ids.mdlist.add_widget(item)
+                   
+    def get_name(self,):
+
+        self.ids.text_home.text= 'Hola '+ self.parent.user.id_user['username']
+
+    def origin_or_destin(self, o_d):
+
+        if o_d == 'o':
+
+            if 'destination' in self.dict_query:
                 
-                self.ids.mdlist.add_widget(MDDivider())
-                
-                for order in self.parent.on_road['results']:
+                del self.dict_query['destination']
 
-                    self.order_item(order, self.ids.mdlist)
-                
-                self.ids.mdlist.add_widget(
-                    MDListItem(
-                        MDListItemHeadlineText(
-                            text= 'PEDIDOS PREPARADOS',
-                            halign= "center"
-                            ), 
-                        MDListItemTrailingIcon(
-                            MDBadge(
-                            text= str(self.parent.receiver['count'])  
-                            ),
-                            icon= 'information-variant',
-                        )
-                    )
-                )
-                
-                self.ids.mdlist.add_widget(MDDivider())
-                
-                for order in self.parent.receiver['results']:
+            self.dict_query['origin']= self.parent.user.perfil
 
-                    self.order_item(order, self.ids.mdlist)
+        elif o_d == 'd':
+
+            if 'origin' in self.dict_query:
+                
+                del self.dict_query['origin']
+
+            self.dict_query['destination']= self.parent.user.perfil
         
-        except:
-            
-            self.parent.go_snack('Error de conexión')
-               
-    @deco
-    def get_order(self,):
-        
-        try:
-            
-            self.parent.on_road= self.parent.user.view_road('?q='+ str({"status":"c", "origin": self.parent.user.perfil}).replace("'",'"').replace(' ',''))
+        else:
+            pass
 
-            self.parent.receiver= self.parent.user.view_road('?q='+ str({"status":"p", "origin": self.parent.user.perfil}).replace("'",'"').replace(' ',''))
+    def get_orders(self, state):  
+      
+        self.ids.mdlist.clear_widgets(self.ids.mdlist.children)   
 
-            self.order_list()
-            
-            self.parent.stop_progres(self)
+        if state == 'c':
+            self.dict_query['status']= 'c'
+
+        elif state == 'p':
+            self.dict_query['status']= 'p'
+
+        else: 
+            pass
+
+        if 'destination' in self.dict_query:
+
+            self.parent.list= self.parent.user.view_road('?q='+ str(self.dict_query).replace("'",'"').replace(' ',''))
+
+            for order in self.parent.list['results']:
+
+                self.order_item(order)
         
-        except:
-            
-            self.parent.go_snack('Error de conexión')
-            
-            self.parent.stop_progres(self)
-            
-            
+        elif 'origin' in self.dict_query:
+
+            self.parent.list= self.parent.user.view_road('?q='+ str(self.dict_query).replace("'",'"').replace(' ',''))
 
         
+            for order in self.parent.list['results']:
 
+                self.order_item(order)
 
-
+        else: 
+            self.parent.go_snack('Complete los campos')

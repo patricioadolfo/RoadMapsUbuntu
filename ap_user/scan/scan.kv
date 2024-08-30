@@ -72,19 +72,6 @@
             role: "small"
             pos_hint: {'center_x': .5,'center_y': .5}
                             
-    MDExtendedFabButton:
-        style:'large' 
-        color_map: 'secondary'
-        pos_hint: {"center_x": .8, "center_y": .1}
-        fab_state: "expand"
-        line_color: app.theme_cls.primaryColor
-        on_press: 
-            on_press: root.create_order()
-        MDExtendedFabButtonIcon:
-            icon: "plus"
-
-        MDExtendedFabButtonText:
-            text: "Nuevo envío"
 
 <QrDialog>    
     auto_dismiss: False

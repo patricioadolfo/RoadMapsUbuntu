@@ -1,26 +1,43 @@
-<OrdersScreen>
-    name: 'ordersscreen'
+<DialogCreate>
+    id: dialog_create
+    auto_dismiss: False
+    size_hint_x: .9
+    MDDialogContentContainer:
 
-    MDScrollView:
-        do_scroll_x: False
+        MDTextField:
+            id: text_detail
+            mode: "outlined"
+            max_height: "200dp"
+            multiline: True
+            size_hint_x: .8
+            radius: 0, 40, 40, 40
+            pos_hint: {'center_x': .5, 'center_y': .5 }
+            MDTextFieldHelperText:
+                text: "Detalle"
+                mode: "persistent"
+            MDTextFieldMaxLengthText:
+                max_text_length: 120
 
-        MDList:
-            id: mdlist
-    
-    MDExtendedFabButton:
-        style:'large' 
-        color_map: 'secondary'
-        pos_hint: {"center_x": .7, "center_y": .1}
-        fab_state: "expand"
-        line_color: app.theme_cls.primaryColor
-        on_press: 
-            root.parent.current= 'ordercreatescreen'
-        MDExtendedFabButtonIcon:
-            icon: "plus"
+    MDDialogButtonContainer:
+        spacing:"8dp"
+        
+        MDButton:
+            on_press:
+                root.create_order(text_detail)
+            MDButtonText:
+                text:'Siguiente'
 
-        MDExtendedFabButtonText:
-            text: "Nuevo envío"
+        MDButton:
+            on_press:
+                root.dismiss()
+            MDButtonText:
+                text:'Cancelar'
 
+
+<CheckB>
+    group: 'group'
+    on_active: root.check_active(*args) 
+        
 <OrderCreate>
     name: 'ordercreatescreen'
     MDBoxLayout:
@@ -29,11 +46,6 @@
             orientation: 'horizontal'
             padding:10
             size_hint_y: .1
-            MDIconButton:
-                icon: 'keyboard-backspace' 
-                pos_hint: {'center_x': .1, 'center_y': .5}
-                on_press: 
-                    root.parent.current= 'ordersscreen'
             MDLabel:
                 text: 'Nuevo envio' 
                 halign: 'center'
@@ -45,29 +57,26 @@
         MDDivider:
         
         MDBoxLayout:
-            orientation: 'vertical'
-            padding:20
             size_hint_y: .9
 
-            MDTextField:
-                id: text_detail
-                mode: "outlined"
-                max_height: "200dp"
-                multiline: True
-                size_hint_x: .8
-                radius: 0, 40, 40, 40
-                pos_hint: {'center_x': .5, 'center_y': .5 }
-                MDTextFieldHelperText:
-                    text: "Detalle"
-                    mode: "persistent"
-                MDTextFieldMaxLengthText:
-                    max_text_length: 10
+            MDScrollView:
+                do_scroll_x: False
 
-            MDDropDownItem:
-                on_release: root.open_menu(self)
-                size_hint_x: .2
-                pos_hint: {'center_x': .1, 'center_y': .5}
-                
-                MDDropDownItemText:
-                    id: drop_text
-                    text: 'Destino'
+                MDList:
+                    id: mdlist
+
+    MDExtendedFabButton:
+        style:'large' 
+        color_map: 'secondary'
+        pos_hint: {"center_x": .8, "center_y": .1}
+        fab_state: "expand"
+        line_color: app.theme_cls.primaryColor
+        on_press: 
+            root.open_dialog()
+ 
+        MDExtendedFabButtonIcon:
+            icon: "plus"
+
+        MDExtendedFabButtonText:
+            text: "Crear"
+            

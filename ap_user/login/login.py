@@ -60,7 +60,7 @@ class LoginScreen(MDScreen):
         
         self.parent.current= 'homescreen' 
         
-        self.parent.parent.ids.home_screen.order_list()  
+        self.parent.parent.ids.home_screen.get_name()  
     
     @deco    
     def login_a(self, username, password):
@@ -76,11 +76,7 @@ class LoginScreen(MDScreen):
             self.parent.user.log(url, username, password)
                                
             self.save_log(username, password)
-            
-            self.parent.on_road= self.parent.user.view_road('?q='+ str({"status":"c", "origin": self.parent.user.perfil}).replace("'",'"').replace(' ',''))
-
-            self.parent.receiver= self.parent.user.view_road('?q='+ str({"status":"p", "origin": self.parent.user.perfil}).replace("'",'"').replace(' ',''))
-            
+                  
             try:
             
                 self.parent.user.printer = self.store.get('print')['print']
@@ -94,8 +90,8 @@ class LoginScreen(MDScreen):
         except:
                 
             self.parent.go_snack('Login incorrecto')
-            
-        self.parent.stop_progres(self)
+
+        self.parent.stop_progres(self)    
 
     def open_ipdialog(self):
         

@@ -212,8 +212,6 @@ class QrScreen(MDScreen):
         self.ids.scan.enable_analyze_pixels= True
 
         self.ids.scan.connect_camera(enable_analyze_pixels = True )
-
-        self.parent.stop_progres(self)
     
     @deco
     def on_focus(self,):
@@ -260,7 +258,7 @@ class QrScreen(MDScreen):
             self.parent.go_snack('Error de conexión')
             
             self.clear_qr_text()
-            
+      
     def close_cam(self,):
         
         try:
@@ -268,7 +266,9 @@ class QrScreen(MDScreen):
             self.enable_analyze_pixels = False 
             
             self.ids.scan.disconnect_camera()
-            
+
+            sleep(.5)
+ 
         except:
             
             pass

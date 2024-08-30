@@ -53,8 +53,13 @@ INSTALLED_APPS = [
     'api_route.apps.ApiRouteConfig',
     'rest_framework',
     'qr_code',
+    'dbbackup', 
 #    'docs',  
 ]
+
+
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': '/home/patricio/www/RoadMaps/backup/'}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -44,8 +44,7 @@ class RmScreenManager(MDScreenManager):
         self.stop_progres(self.get_screen(self.current))
 
     def login_out(self, log, btns):
-        
-        self.current= 'loginscreen'
+
         
         if log.icon != 'account-circle-outline': 
             
@@ -110,11 +109,11 @@ class RoadMapsApp(MDApp):
                 self.ip= ''
     
     def on_checkbox_active(self, checkbox, value):
-        
+
         if value:
     
             self.root.ids.screen_manager.user.printer= checkbox.parent.parent.children[1].children[0].children[0].text    
-    
+
             self.store.put('print', print= self.root.ids.screen_manager.user.printer )
     
     def build(self):

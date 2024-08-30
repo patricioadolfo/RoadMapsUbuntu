@@ -1,7 +1,7 @@
 #: import HomeScreen home.home
 #: include home/home.kv
 
-#: import OrdersScreen,OrderCreate orders.orders
+#: import OrderCreate,CheckB,DialogCreate orders.orders
 #: include orders/orders.kv
 
 #: import LoginScreen,DialogIp login.login
@@ -9,6 +9,7 @@
 
 #: import QrScreen,QrDialog,ScanAnalyze,QrPrinter,Check scan.scan
 #: include scan/scan.kv
+
 
 <RmScreenManager>
 
@@ -73,10 +74,11 @@ MDBoxLayout:
             MDActionTopAppBarButton:
                 icon: "account-circle-outline"
                 id: btn_log
-                on_press: 
-                    root.ids.screen_manager.login_out(btn_log, [home_btn, qr_btn, order_btn])
-                    root.ids.qr_screen.close_cam()
- 
+                on_press:   
+                    root.ids.screen_manager.login_out(btn_log, [home_btn, qr_btn, order_btn])   
+                    root.ids.qr_screen.close_cam()              
+                    root.ids.screen_manager.current= 'loginscreen'
+                                
     RmScreenManager:
         id: screen_manager
 
@@ -88,9 +90,6 @@ MDBoxLayout:
 
         QrScreen:
             id: qr_screen
-
-        OrdersScreen:
-            id: orders_screen
 
         OrderCreate:
             id: order_create
@@ -109,11 +108,12 @@ MDBoxLayout:
             text: "Home"
             disabled: True
             on_press: 
-                screen_manager.current= 'homescreen'
                 screen_manager.progress(home_screen)
             on_release:
-                qr_screen.close_cam()
-                home_screen.get_order()                
+                qr_screen.close_cam()               
+                screen_manager.stop_progres(home_screen)
+                screen_manager.current= 'homescreen'
+              
 
         BaseMDNavigationItem
             id: qr_btn
@@ -122,21 +122,23 @@ MDBoxLayout:
             disabled: True
             on_press: 
                 screen_manager.progress(qr_screen)
+                qr_screen.on_focus()
+                screen_manager.stop_progres(qr_screen)
                 screen_manager.current= 'qrscreen'                
             on_release:
-                qr_screen.on_focus()
+                
 
         BaseMDNavigationItem
             id: order_btn
             icon: "package-variant-closed"
-            text: "Pedidos"
+            text: "Nuevo"
             disabled: True
-            on_press:
-                screen_manager.current= 'ordersscreen'
-                screen_manager.progress(orders_screen)
-            on_release:                 
+            on_press:               
                 qr_screen.close_cam()
-                orders_screen.get_order()
+                order_create.branch_nodes()
+                screen_manager.current= 'ordercreatescreen'
+                
+             
               
             
 

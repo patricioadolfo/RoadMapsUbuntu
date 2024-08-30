@@ -9,10 +9,50 @@
         font_style: "Title"
         halign: "center"
 
-    MDDivider:
-    
+
+    MDSegmentedButton:
+        size_hint_y: .15
+        size_hint_x: .9
+        pos_hint: {'center_x': 0.5,'center_y': 0.8}
+
+        MDSegmentedButtonItem:
+            on_press: root.origin_or_destin('o')
+            MDSegmentButtonIcon:
+                icon: 'package-variant-closed-minus'
+
+            MDSegmentButtonLabel:
+                text: "ENVIAR"
+
+        MDSegmentedButtonItem:
+            on_press: root.origin_or_destin('d')
+            MDSegmentButtonIcon:
+                icon: "package-variant-closed-plus"
+
+            MDSegmentButtonLabel:
+                text: "RECIBIR"
+
+    MDSegmentedButton:
+        size_hint_y: .15
+        size_hint_x: .8
+        pos_hint: {'center_x': 0.5,'center_y': 0.7}
+
+        MDSegmentedButtonItem:
+            id: prep
+            on_press: root.get_orders('p')
+
+            MDSegmentButtonLabel:
+                text: "Preparados"
+
+        MDSegmentedButtonItem:
+            id: en_cam
+            on_press: root.get_orders('c')
+
+            MDSegmentButtonLabel:
+                text: "En camino"
+
+
     MDBoxLayout:
-        size_hint_y: .85
+        size_hint_y: .6
 
         MDScrollView:
             do_scroll_x: False

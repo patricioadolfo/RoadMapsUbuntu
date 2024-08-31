@@ -43,6 +43,7 @@ DOCS_ACCESS = 'public'
 # Application definition
 
 INSTALLED_APPS = [
+    #'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -146,7 +147,7 @@ STATIC_URL = 'static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 
-
+#SITE_ID = 1
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -155,7 +156,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/'
 
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+#EMAIL_HOST = 'smtp.gmail.com'
+#EMAIL_HOST_USER = 'violetalamonicaprimaria@gmail.com'
+#EMAIL_HOST_PASSWORD = 'Viomaleylu1@'
+#EMAIL_PORT = '587'
+#EMAIL_USE_TLS = True
+#DEFAULT_FROM_EMAIL = 'Notificación <violetalamonicaprimaria@gmail.com>'
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',

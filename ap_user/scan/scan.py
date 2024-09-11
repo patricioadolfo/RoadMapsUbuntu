@@ -2,7 +2,7 @@ from camera4kivy import Preview
 from PIL import Image
 from pyzbar.pyzbar import decode
 from kivy.clock import mainthread
-
+from kivy.clock import Clock
 from kivy.properties import ObjectProperty
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.dialog import MDDialog
@@ -52,8 +52,6 @@ class QrPrinter(MDScreen):
         try:
             if self.parent.user.id_user != {}:
                 
-                self.prepared= self.parent.user.view_road('?q='+ str({"status":"p", "origin": self.parent.user.perfil}).replace("'",'"').replace(' ',''))
-
                 self.list_orders()
                 
         except:
@@ -65,7 +63,7 @@ class QrPrinter(MDScreen):
         
         self.ids.mdlist.clear_widgets(self.ids.mdlist.children)
        
-        for order in self.prepared['results']:
+        for order in self.parent.user.dict['origin_prep']:
 
             self.order_item(order, self.ids.mdlist)
                  
@@ -205,20 +203,14 @@ class QrScreen(MDScreen):
         sleep(5)
         
         self.text_qr= ''
+ 
+    def focus(self,dt):
+        self.ids.scan.connect_camera(enable_analyze_pixels = True,
+                                             enable_video = False)
 
-    @mainthread    
-    def focus(self,):
-
-        self.ids.scan.enable_analyze_pixels= True
-
-        self.ids.scan.connect_camera(enable_analyze_pixels = True )
-    
-    @deco
     def on_focus(self,):
-        
-        sleep(.5)
-        
-        self.focus()   
+
+        Clock.schedule_once(self.focus)
                        
     def get_qr_dialog(self,):  
         
@@ -228,11 +220,13 @@ class QrScreen(MDScreen):
                             
             if self.text_qr != '':
 
+                self.manager.progress(self)
+
                 self.qr_result()  
     
     @deco
     def qr_result(self,):
-        
+            
         try:
 
             route= self.parent.user.view_road(self.text_qr)
@@ -252,8 +246,12 @@ class QrScreen(MDScreen):
                 self.qr_card.qr_open()
                 
                 self.clear_qr_text()
-             
+
+            self.manager.stop_progres(self)
+
         except:
+            
+            self.manager.stop_progres(self)
             
             self.parent.go_snack('Error de conexión')
             
@@ -263,11 +261,9 @@ class QrScreen(MDScreen):
         
         try:
             
-            self.enable_analyze_pixels = False 
+            #self.enable_analyze_pixels = False 
             
             self.ids.scan.disconnect_camera()
-
-            sleep(.5)
  
         except:
             

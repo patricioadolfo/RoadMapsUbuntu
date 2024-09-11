@@ -69,10 +69,8 @@ class OrderCreate(MDScreen):
         self.ids.mdlist.clear_widgets(self.ids.mdlist.children)
         
         if self.manager.user.id_user != {}:
-        
-            nodes= self.manager.user.nodes_origin
             
-            for node in nodes:
+            for node in self.manager.user.dict['nodes_origin']:
                 
                 self.ids.mdlist.add_widget(MDListItem(
                                                     MDListItemLeadingIcon(

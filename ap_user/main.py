@@ -8,12 +8,10 @@ from kivy.storage.jsonstore import JsonStore
 from kivymd.uix.snackbar import MDSnackbar
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivy.clock import mainthread
+from android_permissions import AndroidPermissions
 
 import models   
 
-#from android.permissions import request_permissions, Permission
-    
-#request_permissions([Permission.CAMERA, Permission.INTERNET])
 
 class Progress(MDFloatLayout):
     pass
@@ -40,7 +38,7 @@ class RmScreenManager(MDScreenManager):
         except:
                 
             self.go_snack('Error de conexión')
-            
+
         self.stop_progres(self.get_screen(self.current))
 
     def login_out(self, log, btns):
@@ -77,16 +75,23 @@ class RmScreenManager(MDScreenManager):
             
         screen.remove_widget(self.progres)
 
-
     user= models.User()
 
 class RoadMapsApp(MDApp):
     
     icon= 'truck.png'
-    
-    store = JsonStore('load.json')
+
+    def on_start(self):
+        
+        self.dont_gc = AndroidPermissions(self.start_app)
+
+    def start_app(self):
+        
+        self.dont_gc = None
         
     def load_log(self,):
+
+        self.store = JsonStore('load.json')
         
         try:
         

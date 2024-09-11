@@ -1,14 +1,11 @@
 from kivymd.uix.screen import MDScreen
-from models import deco
-from kivy.clock import mainthread
-
 from kivymd.uix.list import MDListItem, MDListItemLeadingIcon, MDListItemTertiaryText
 
 
        
 class HomeScreen(MDScreen):
     
-    dict_query= {}
+    origin_or_destin= ''
 
     def order_item(self, order):            
            
@@ -28,56 +25,42 @@ class HomeScreen(MDScreen):
 
         self.ids.text_home.text= 'Hola '+ self.parent.user.id_user['username']
 
-    def origin_or_destin(self, o_d):
-
-        if o_d == 'o':
-
-            if 'destination' in self.dict_query:
-                
-                del self.dict_query['destination']
-
-            self.dict_query['origin']= self.parent.user.perfil
-
-        elif o_d == 'd':
-
-            if 'origin' in self.dict_query:
-                
-                del self.dict_query['origin']
-
-            self.dict_query['destination']= self.parent.user.perfil
-        
-        else:
-            pass
-
     def get_orders(self, state):  
       
         self.ids.mdlist.clear_widgets(self.ids.mdlist.children)   
+            
+        if self.origin_or_destin == 'o':
 
-        if state == 'c':
-            self.dict_query['status']= 'c'
+            if state == 'p':
+                    
+                query= self.manager.user.dict['origin_prep']
 
-        elif state == 'p':
-            self.dict_query['status']= 'p'
+            else:
+                    
+                query = self.manager.user.dict['origin_on_road']
 
-        else: 
-            pass
-
-        if 'destination' in self.dict_query:
-
-            self.parent.list= self.parent.user.view_road('?q='+ str(self.dict_query).replace("'",'"').replace(' ',''))
-
-            for order in self.parent.list['results']:
+            for order in query:
 
                 self.order_item(order)
-        
-        elif 'origin' in self.dict_query:
+            
+        elif self.origin_or_destin == 'd':
 
-            self.parent.list= self.parent.user.view_road('?q='+ str(self.dict_query).replace("'",'"').replace(' ',''))
+            if state == 'p':
 
-        
-            for order in self.parent.list['results']:
+                query= self.manager.user.dict['destin_prep']
+
+            else:
+
+                query= self.manager.user.dict['destin_on_road']
+ 
+            for order in query:
 
                 self.order_item(order)
 
         else: 
+
             self.parent.go_snack('Complete los campos')
+
+
+        
+ 

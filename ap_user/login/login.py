@@ -75,8 +75,10 @@ class LoginScreen(MDScreen):
             
             self.parent.user.log(url, username, password)
                                
+            self.parent.user.pre_load()
+
             self.save_log(username, password)
-                  
+
             try:
             
                 self.parent.user.printer = self.store.get('print')['print']

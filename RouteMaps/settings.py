@@ -33,8 +33,8 @@ SECRET_KEY = 'django-insecure-$rl9#_w(qfwobooqq_r7$5yij#os#xke$czkp5yy7tt69(53n6
 DEBUG = True
 #DEBUG = ENVIRONMENT.get('DEBUG') 
 
-ALLOWED_HOSTS = ['192.168.0.5']
-#ALLOWED_HOSTS = ['10.0.10.83']
+#ALLOWED_HOSTS = ['192.168.0.5']
+ALLOWED_HOSTS = ['10.0.10.83']
 #ALLOWED_HOSTS = ['*']# Para Prueba de produccion
 
 DOCS_ROOT = os.path.join(BASE_DIR, 'docs/build/html')
@@ -43,7 +43,7 @@ DOCS_ACCESS = 'public'
 # Application definition
 
 INSTALLED_APPS = [
-    #'django.contrib.sites',
+    'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'qr_code',
     'dbbackup', 
-#    'docs',  
 ]
 
 
@@ -147,8 +146,6 @@ STATIC_URL = 'static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 
-#SITE_ID = 1
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
@@ -156,16 +153,21 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/'
 
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+SITE_ID = 2 # id dominio
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-#EMAIL_HOST = 'smtp.gmail.com'
-#EMAIL_HOST_USER = 'violetalamonicaprimaria@gmail.com'
-#EMAIL_HOST_PASSWORD = 'Viomaleylu1@'
-#EMAIL_PORT = '587'
-#EMAIL_USE_TLS = True
-#DEFAULT_FROM_EMAIL = 'Notificación <violetalamonicaprimaria@gmail.com>'
+EMAIL_HOST = 'smtp.gmail.com'
+
+EMAIL_HOST_USER = 'violetalamonicaprimaria@gmail.com'
+
+EMAIL_HOST_PASSWORD = 'phypqmgffzjzuhgz'
+
+EMAIL_PORT = '587'
+
+EMAIL_USE_TLS = True
+
+DEFAULT_FROM_EMAIL = 'Notificación <violetalamonicaprimaria@gmail.com>'
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',

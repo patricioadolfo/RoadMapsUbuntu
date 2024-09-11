@@ -5,6 +5,7 @@ import socket
 import json
 from threading import Thread
 
+
 def deco(funcion):
     
     def envolvente(*args):
@@ -116,7 +117,13 @@ class User(Route, Client):
     def __init__(self,):
         
         self.id_user= {}
-    
+        
+        self.dict= {}
+
+        self.time_preload= 60
+
+        self.stop= False
+
     def view_nodes(self, url):
         
         self.url= url
@@ -161,26 +168,30 @@ class User(Route, Client):
         
             self.id_user= id.json()['results'][0]         
 
-            self.nodes_origin= self.view_nodes(self.url_origin)
+#            self.nodes_origin= self.view_nodes(self.url_origin)
             
-            self.nodes_destin= self.view_nodes(self.url_destin)
+#            self.nodes_destin= self.view_nodes(self.url_destin)
             
             self.url= self.url_perfil
 
             perfil = self.get_url('?q='+ str({"user": self.id_user['id']}).replace("'",'"').replace(' ',''))
             
             self.perfil= perfil['results'][0]['nodo']
-                          
+
     def logOut(self,):
 
         self.id_user= {}
+
+        self.dict= {}
+
+        self.stop = True
         
         if 'csrftoken' in self.client.cookies:
 
             csrftoken = self.client.cookies['csrftoken']
        
             self.client.post(self.url_logout, data=dict(csrfmiddlewaretoken=csrftoken, next=''), headers=dict(Referer= self.url_logout))
-    
+            
     def on_road(self, id_route):
         
         self.url= self.url_route
@@ -229,3 +240,33 @@ class User(Route, Client):
         post= self.post_url(payload)
         
         return post
+    
+    @deco
+    def pre_load(self,):
+
+        while True:
+
+            if self.stop == True:
+
+                break
+
+            else:
+
+                try:
+
+                    self.dict['nodes_origin'] = self.view_nodes(self.url_origin)
+
+                    self.dict['nodes_destin']= self.view_nodes(self.url_destin)
+
+                    self.dict['origin_prep'] = self.view_road('?q='+ str({'origin': self.perfil, 'status': 'p'}).replace("'",'"').replace(' ',''))['results']
+                
+                    self.dict['origin_on_road'] = self.view_road('?q='+ str({'origin': self.perfil, 'status': 'c'}).replace("'",'"').replace(' ',''))['results']
+
+                    self.dict['destin_prep']= self.view_road('?q='+ str({'destination': self.perfil, 'status': 'p'}).replace("'",'"').replace(' ',''))['results']
+
+                    self.dict['destin_on_road']= self.view_road('?q='+ str({'destination': self.perfil, 'status': 'c'}).replace("'",'"').replace(' ',''))['results']
+
+                    time.sleep(60)
+
+                except: KeyboardInterrupt
+                   

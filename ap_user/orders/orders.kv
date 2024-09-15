@@ -26,15 +26,24 @@
                 root.create_order(text_detail)
             MDButtonText:
                 text:'Siguiente'
+                theme_text_color: "Custom"
+                text_color: app.theme_cls.tercearyColor
 
         MDButton:
             on_press:
                 root.dismiss()
             MDButtonText:
                 text:'Cancelar'
+                theme_text_color: "Custom"
+                text_color: app.theme_cls.tercearyColor
 
 
 <CheckB>
+    color_active: app.theme_cls.tercearyColor
+    ripple_effect: False
+    size_hint: None, None
+    width: "20dp"
+    height: "20dp"
     group: 'group'
     on_active: root.check_active(*args) 
         
@@ -50,7 +59,6 @@
                 text: 'Nuevo envio' 
                 halign: 'center'
                 font_style: "Title"
-                color: app.theme_cls.primaryColor
                 bold: True       
                 pos_hint: {'center_x': .5, 'center_y': .5}
 
@@ -70,13 +78,17 @@
         color_map: 'secondary'
         pos_hint: {"center_x": .8, "center_y": .1}
         fab_state: "expand"
-        line_color: app.theme_cls.primaryColor
+        line_color: app.theme_cls.tercearyColor
         on_press: 
             root.open_dialog()
  
         MDExtendedFabButtonIcon:
             icon: "plus"
+            theme_icon_color: "Custom"
+            icon_color: app.theme_cls.tercearyColor
 
         MDExtendedFabButtonText:
             text: "Crear"
+            theme_text_color: "Custom"
+            text_color: app.theme_cls.tercearyColor
             

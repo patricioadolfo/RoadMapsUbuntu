@@ -3,7 +3,7 @@ from kivy.storage.jsonstore import JsonStore
 from models import deco
 from kivy.clock import mainthread
 from kivymd.uix.dialog import MDDialog
-
+from kivy.clock import Clock
 
 class DialogIp(MDDialog):
     
@@ -74,8 +74,10 @@ class LoginScreen(MDScreen):
             password= password._get_text()
             
             self.parent.user.log(url, username, password)
+
+            Clock.schedule_once(self.parent.user.pre_load)
                                
-            self.parent.user.pre_load()
+            Clock.schedule_interval(self.parent.user.pre_load, 10)
 
             self.save_log(username, password)
 

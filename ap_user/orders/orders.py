@@ -1,12 +1,10 @@
 from kivymd.uix.screen import MDScreen
-from kivymd.uix.list import MDListItem, MDListItemLeadingIcon, MDListItemHeadlineText, MDListItemTrailingCheckbox
-from kivymd.uix.menu import MDDropdownMenu
-from models import deco
+from kivymd.uix.list import MDListItem, MDListItemLeadingIcon, MDListItemSupportingText, MDListItemTrailingCheckbox
 from kivy.clock import mainthread
 from kivymd.uix.dialog import MDDialog
 
 class CheckB(MDListItemTrailingCheckbox):
-    
+
     def check_active(self, checkbox, value):
         
         if value:
@@ -15,9 +13,9 @@ class CheckB(MDListItemTrailingCheckbox):
 
 class DialogCreate(MDDialog):
 
-    def open_dialog(self, user, branch):
+    def open_dialog(self, manager, branch):
 
-        self.user= user
+        self.manager= manager
 
         self.branch= branch
 
@@ -28,26 +26,29 @@ class DialogCreate(MDDialog):
         self.text=  text._get_text()
 
         if self.text == '':
-             pass
+             
+             self.manager.go_snack('Describa su envío')
         
         else:
 
             try: 
 
-                create = self.user.route_create(self.text, self.branch)
+                create = self.manager.user.route_create(self.text, self.branch)
 
                 if create == 400:
                     
-                    pass
-    
-                    
+                    self.manager.go_snack('Error de conexión')
+                       
                 else:
+                    self.manager.go_snack('Envío creado con éxito')
                     
                     self.dismiss()
                                 
             except:
                 
-                pass
+                self.manager.go_snack('Error de conexión')
+
+                self.dismiss()
 
 class OrderCreate(MDScreen):
     
@@ -58,7 +59,7 @@ class OrderCreate(MDScreen):
 
         try:
 
-            self.dialog.open_dialog(self.manager.user, self.order_branch) 
+            self.dialog.open_dialog(self.manager, self.order_branch) 
 
         except:
 
@@ -76,11 +77,12 @@ class OrderCreate(MDScreen):
                                                     MDListItemLeadingIcon(
                                                         icon='map-marker-radius-outline',
                                                             ),
-                                                            MDListItemHeadlineText(
+                                                            MDListItemSupportingText(
                                                                 text= node['name'],
                                                             ),
                                                             CheckB(
                                                                     ),
+                                                            ripple_effect= False,
                                                             ids= node
                                                                 )
                                                                 )

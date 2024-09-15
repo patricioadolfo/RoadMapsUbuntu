@@ -1,4 +1,5 @@
 <Check>
+    color_active: app.theme_cls.tercearyColor
     group: 'group'
     on_active: app.on_checkbox_active(*args)
 
@@ -111,6 +112,8 @@
                 root.close_card()
             MDButtonText:
                 text:"Cancelar"
+                theme_text_color: "Custom"
+                text_color: app.theme_cls.tercearyColor
 
         MDButton:
             id: btn_rec
@@ -119,5 +122,9 @@
                 root.receive_route() 
             MDButtonIcon:
                 icon: 'package-variant-closed-plus'
+                theme_icon_color: "Custom"
+                icon_color: app.theme_cls.tercearyColor
             MDButtonText:
                 text:'Recibir'
+                theme_text_color: "Custom"
+                text_color: app.theme_cls.tercearyColor

@@ -120,6 +120,8 @@ class User(Route, Client):
         
         self.dict= {}
 
+        self._dict= {}
+
         self.time_preload= 60
 
         self.stop= False
@@ -241,32 +243,25 @@ class User(Route, Client):
         
         return post
     
-    @deco
-    def pre_load(self,):
+    def pre_load(self, dt):
 
-        while True:
-
-            if self.stop == True:
-
-                break
-
-            else:
-
-                try:
-
-                    self.dict['nodes_origin'] = self.view_nodes(self.url_origin)
-
-                    self.dict['nodes_destin']= self.view_nodes(self.url_destin)
-
-                    self.dict['origin_prep'] = self.view_road('?q='+ str({'origin': self.perfil, 'status': 'p'}).replace("'",'"').replace(' ',''))['results']
+        try:
                 
-                    self.dict['origin_on_road'] = self.view_road('?q='+ str({'origin': self.perfil, 'status': 'c'}).replace("'",'"').replace(' ',''))['results']
+            self._dict['nodes_origin'] = self.view_nodes(self.url_origin)
 
-                    self.dict['destin_prep']= self.view_road('?q='+ str({'destination': self.perfil, 'status': 'p'}).replace("'",'"').replace(' ',''))['results']
+            self._dict['nodes_destin']= self.view_nodes(self.url_destin)
 
-                    self.dict['destin_on_road']= self.view_road('?q='+ str({'destination': self.perfil, 'status': 'c'}).replace("'",'"').replace(' ',''))['results']
+            self._dict['origin_prep'] = self.view_road('?q='+ str({'origin': self.perfil, 'status': 'p'}).replace("'",'"').replace(' ',''))['results']
+        
+            self._dict['origin_on_road'] = self.view_road('?q='+ str({'origin': self.perfil, 'status': 'c'}).replace("'",'"').replace(' ',''))['results']
 
-                    time.sleep(60)
+            self._dict['destin_prep']= self.view_road('?q='+ str({'destination': self.perfil, 'status': 'p'}).replace("'",'"').replace(' ',''))['results']
 
-                except: KeyboardInterrupt
-                   
+            self._dict['destin_on_road']= self.view_road('?q='+ str({'destination': self.perfil, 'status': 'c'}).replace("'",'"').replace(' ',''))['results']
+
+            self.dict= self._dict
+            
+        except: 
+
+            pass
+            

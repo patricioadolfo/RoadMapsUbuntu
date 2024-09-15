@@ -55,21 +55,14 @@ MDBoxLayout:
         id: title_ap
         md_bg_color: app.theme_cls.primaryColor
 
+        MDBoxLayout:
+            pos_hint: {'center_x': 0.5,'center_y': 0.5}
+            FitImage:
+                source: './icons/aguila.png'
+                size_hint_x: self.parent.size_hint_x                
+                padding: 5
+
         MDTopAppBarLeadingButtonContainer:
-
-            MDActionTopAppBarButton:
-                id: switch_theme
-                icon: 'theme-light-dark'
-                on_release: app.switch_theme_style()
-
-        MDTopAppBarTitle:
-            id: title_text
-            text: "Hoja de Ruta"
-            font_style: "Title"
-            bold: True  
-
-        MDTopAppBarTrailingButtonContainer:
-            pos_hint: {"center_x": 1}
 
             MDActionTopAppBarButton:
                 icon: "account-circle-outline"
@@ -78,7 +71,16 @@ MDBoxLayout:
                     root.ids.screen_manager.login_out(btn_log, [home_btn, qr_btn, order_btn])   
                     root.ids.qr_screen.close_cam()              
                     root.ids.screen_manager.current= 'loginscreen'
-                                
+        
+        MDTopAppBarTitle:
+            id: title_text
+            text: "Hoja de Ruta"
+            font_style: "Title"
+            bold: True  
+ 
+    MDDivider:
+        color: app.theme_cls.tercearyColor
+                  
     RmScreenManager:
         id: screen_manager
 
@@ -100,7 +102,7 @@ MDBoxLayout:
     MDNavigationBar:
         radius: 50, 50, 0, 0
         md_bg_color: app.theme_cls.secondaryContainerColor
-        line_color: self.theme_cls.primaryColor
+        line_color: app.theme_cls.tercearyColor
 
         BaseMDNavigationItem
             id: home_btn
@@ -125,7 +127,6 @@ MDBoxLayout:
                 qr_screen.on_focus()
                 screen_manager.stop_progres(qr_screen)
                 screen_manager.current= 'qrscreen'                
-            on_release:
                 
 
         BaseMDNavigationItem

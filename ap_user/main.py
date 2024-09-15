@@ -9,7 +9,6 @@ from kivymd.uix.snackbar import MDSnackbar
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivy.clock import mainthread
 from android_permissions import AndroidPermissions
-
 import models   
 
 
@@ -79,7 +78,7 @@ class RmScreenManager(MDScreenManager):
 
 class RoadMapsApp(MDApp):
     
-    icon= 'truck.png'
+    icon= 'icons/truck.png'
 
     def on_start(self):
         
@@ -122,40 +121,27 @@ class RoadMapsApp(MDApp):
             self.store.put('print', print= self.root.ids.screen_manager.user.printer )
     
     def build(self):
-
-        self.theme_cls.primary_palette = "Aliceblue"
         
         self.set_bars_colors()
+
+        self.theme_cls.primary_hue = "A700"
        
-        self.theme_cls.theme_style = "Dark"    
+        self.theme_cls.theme_style = "Dark"  
+
+        self.theme_cls.primaryColor= [0.08232529, 0.0745098, 0.521569, 1.0]  
+
+        self.theme_cls.tercearyColor= [0.913725, 0.501961, 0.137255, 1.0]
         
         self.load_log()
  
-        self.theme_cls.primary_hue = "A700"
-
-        self.theme_cls.primaryColor= [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0]
-           
         return Builder.load_file('kv.kv')
     
-    def switch_theme_style(self):
-        
-        if self.theme_cls.theme_style == "Dark":
-            
-            self.theme_cls.theme_style= 'Light'
-            self.theme_cls.primaryColor= [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0]
-            self.root.ids.title_text.color= [0.8745098039215686, 0.8901960784313725, 0.9058823529411765, 1.0]
-            self.root.ids.btn_log.color= [0.8745098039215686, 0.8901960784313725, 0.9058823529411765, 1.0]
-            self.root.ids.switch_theme.color= [0.8745098039215686, 0.8901960784313725, 0.9058823529411765, 1.0]
-        else:
-            self.theme_cls.theme_style = "Dark"
-            self.theme_cls.primaryColor= [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0]
-            self.root.ids.title_ap.md_bg_color=  [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0]
             
     def set_bars_colors(self):
         
         set_bars_colors(
-            [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0],  # status bar color
-            [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0],  # navigation bar color
+            [0.08232529, 0.0745098, 0.521569, 1.0] ,  # status bar color
+            [0.08232529, 0.0745098, 0.521569, 1.0],  # navigation bar color
             "Light",      # icons color of status bar
         )
     

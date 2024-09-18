@@ -67,10 +67,10 @@ MDBoxLayout:
             MDActionTopAppBarButton:
                 icon: "account-circle-outline"
                 id: btn_log
-                on_press:   
-                    root.ids.screen_manager.login_out(btn_log, [home_btn, qr_btn, order_btn])   
-                    root.ids.qr_screen.close_cam()              
-                    root.ids.screen_manager.current= 'loginscreen'
+                on_press:
+                    screen_manager.progress(screen_manager.get_screen(screen_manager.current))
+                on_release:   
+                    screen_manager.go_screen('loginscreen', [qr_screen.close_cam(),screen_manager.login_out(btn_log, [home_btn, qr_btn, order_btn])], 'Error')
         
         MDTopAppBarTitle:
             id: title_text
@@ -109,12 +109,11 @@ MDBoxLayout:
             icon: "home"
             text: "Home"
             disabled: True
-            on_press: 
-                screen_manager.progress(home_screen)
-            on_release:
-                qr_screen.close_cam()               
-                screen_manager.stop_progres(home_screen)
-                screen_manager.current= 'homescreen'
+            on_press:
+                screen_manager.progress(screen_manager.get_screen(screen_manager.current))
+            on_release:             
+                screen_manager.go_screen('homescreen', [qr_screen.close_cam()], 'Error')
+
               
 
         BaseMDNavigationItem
@@ -122,11 +121,11 @@ MDBoxLayout:
             icon: "qrcode-scan"
             text: "Qr-Scan"
             disabled: True
-            on_press: 
-                screen_manager.progress(qr_screen)
-                qr_screen.on_focus()
-                screen_manager.stop_progres(qr_screen)
-                screen_manager.current= 'qrscreen'                
+            on_press:
+                screen_manager.progress(screen_manager.get_screen(screen_manager.current))
+            on_release: 
+                screen_manager.go_screen('qrscreen', [qr_screen.on_focus()], 'Error')
+            
                 
 
         BaseMDNavigationItem
@@ -134,10 +133,11 @@ MDBoxLayout:
             icon: "package-variant-closed"
             text: "Nuevo"
             disabled: True
-            on_press:               
-                qr_screen.close_cam()
-                order_create.branch_nodes()
-                screen_manager.current= 'ordercreatescreen'
+            on_press:
+                screen_manager.progress(screen_manager.get_screen(screen_manager.current))
+            on_release:    
+                screen_manager.go_screen('ordercreatescreen', [qr_screen.close_cam(), order_create.branch_nodes()], 'Error')            
+
                 
              
               

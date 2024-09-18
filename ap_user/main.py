@@ -10,7 +10,7 @@ from kivymd.uix.floatlayout import MDFloatLayout
 from kivy.clock import mainthread
 from android_permissions import AndroidPermissions
 import models   
-
+from time import sleep
 
 class Progress(MDFloatLayout):
     pass
@@ -24,36 +24,92 @@ class BaseMDNavigationItem(MDNavigationItem):
     text = StringProperty()
  
 class RmScreenManager(MDScreenManager):
-    
+
+    @mainthread
+    def login_out_btn(self, btns):
+
+        for btn in btns:
+
+            btn.disabled= True
+
     @models.deco
-    def log_out(self,):
-        
-        self.progress(self.get_screen(self.current))
-
-        try:
-                
-            self.user.logOut()
-            
-        except:
-                
-            self.go_snack('Error de conexión')
-
-        self.stop_progres(self.get_screen(self.current))
-
     def login_out(self, log, btns):
-
         
         if log.icon != 'account-circle-outline': 
             
-            self.log_out()
+            self.user.logOut()
+
+            self.event.cancel()
             
             log.icon= 'account-circle-outline'
-            
-            for btn in btns:
-                
-                btn.disabled= True
 
+            self.login_out_btn(btns)
+            
     @mainthread
+    def change_screen(self, screen):
+
+        self.current= screen
+
+    @models.deco
+    def len_list(self, screen):
+
+        while True:
+
+            print(len(self.len_lists))
+
+            if False in self.len_lists:
+
+                self.stop_progres(self.get_screen(self.pre_screen))
+
+                self.go_snack(self.msj)
+
+                break
+
+
+            if len(self.len_lists) == len(self.list):
+
+                if not False in self.len_lists:
+
+                    self.change_screen(screen)
+
+                    self.stop_progres(self.get_screen(self.pre_screen))
+
+                    break
+
+            sleep(0.1)
+
+    @models.deco
+    def hilo(self,funcion):
+            
+        while True:
+
+            if funcion.is_alive() == False:
+
+                self.len_lists.append(True)
+
+                break
+                
+            sleep(0.1)
+
+    def go_screen(self, screen, list, msj):
+
+        self.list = list
+
+        self.len_lists = []
+
+        self.pre_screen = self.current
+
+        self.msj = msj
+
+        for funcion in list:
+
+            funcion= funcion
+
+            self.hilo(funcion)
+
+        self.len_list(screen)
+
+    @mainthread 
     def go_snack(self, mnj):
         
         self.snack= Snack()
@@ -75,6 +131,8 @@ class RmScreenManager(MDScreenManager):
         screen.remove_widget(self.progres)
 
     user= models.User()
+
+    event= ''
 
 class RoadMapsApp(MDApp):
     
@@ -135,8 +193,7 @@ class RoadMapsApp(MDApp):
         self.load_log()
  
         return Builder.load_file('kv.kv')
-    
-            
+                
     def set_bars_colors(self):
         
         set_bars_colors(

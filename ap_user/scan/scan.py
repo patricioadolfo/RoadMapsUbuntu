@@ -2,7 +2,6 @@ from camera4kivy import Preview
 from PIL import Image
 from pyzbar.pyzbar import decode
 from kivy.clock import mainthread
-from kivy.clock import Clock
 from kivy.properties import ObjectProperty
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.dialog import MDDialog
@@ -15,7 +14,8 @@ class Check(MDListItemTrailingCheckbox):
     pass
 
 class QrPrinter(MDScreen):
-      
+
+    @deco  
     def print_order(self, instance, *args):
         
         try:
@@ -29,6 +29,7 @@ class QrPrinter(MDScreen):
             
             self.parent.go_snack('Error de conexión')
     
+    @mainthread
     def order_item(self, order, list):
            
         item= MDListItem(
@@ -205,13 +206,21 @@ class QrScreen(MDScreen):
         self.text_qr= ''
  
     def focus(self,dt):
+        
         self.ids.scan.connect_camera(enable_analyze_pixels = True,
                                              enable_video = False)
 
+    @deco
     def on_focus(self,):
 
-        Clock.schedule_once(self.focus)
-                       
+        try:
+            
+            self.manager.user.clock.schedule_once(self.focus)
+
+        except:
+
+            self.manager.len_lists.append(False)
+    
     def get_qr_dialog(self,):  
         
         self.qr_card= QrDialog()
@@ -257,17 +266,21 @@ class QrScreen(MDScreen):
             
             self.clear_qr_text()
       
+    @mainthread
+    def _close_cam(self,):
+
+        self.ids.scan.disconnect_camera()
+    
+    @deco
     def close_cam(self,):
         
         try:
             
-            #self.enable_analyze_pixels = False 
-            
-            self.ids.scan.disconnect_camera()
+            self._close_cam()
  
         except:
             
-            pass
+            self.manager.len_lists.append(False)
      
     def check_printer(self,):
         

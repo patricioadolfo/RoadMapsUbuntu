@@ -23,7 +23,9 @@
         
         MDButton:
             on_press:
-                root.create_order(text_detail)
+                root.manager.progress(root.manager.get_screen(root.manager.current))
+            on_release:        
+                root.manager.go_screen(root.manager.current, [root.create_order()], 'Error al crear pedido')
             MDButtonText:
                 text:'Siguiente'
                 theme_text_color: "Custom"

@@ -1,19 +1,32 @@
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.list import MDListItem, MDListItemLeadingIcon, MDListItemTertiaryText
-from kivy.uix.behaviors import ButtonBehavior
-
-from kivymd.uix.behaviors import RotateBehavior
-from kivymd.uix.list import MDListItemTrailingIcon
-
+from kivy.clock import mainthread
 from kivymd.uix.menu import MDDropdownMenu
 
-class TrailingPressedIconButton(ButtonBehavior, RotateBehavior, MDListItemTrailingIcon):
-    pass
-       
+from models import deco
+
+
 class HomeScreen(MDScreen):
     
     origin_or_destin= ''
 
+    @mainthread
+    def clear_list(self,):
+
+        self.ids.list_send.clear_widgets(self.ids.list_send.children) 
+
+        self.ids.list_receive.clear_widgets(self.ids.list_receive.children) 
+
+        self.menu.dismiss()
+
+    @mainthread
+    def set_text(self,text_state, text_env):
+
+        self.ids.text_state.text = text_state
+
+        self.ids.text_env.text= text_env
+
+    @mainthread
     def order_item(self, order, list):            
            
         item= MDListItem(
@@ -31,53 +44,66 @@ class HomeScreen(MDScreen):
                    
     def get_name(self,):
 
-        self.ids.text_home.text= 'Hola '+ self.parent.user.id_user['username']
-
+        self.ids.text_home.text= 'Hola '+ self.manager.user.id_user['username']
+   
+    @deco
     def get_orders(self, state):  
-      
-        self.ids.list_send.clear_widgets(self.ids.list_send.children) 
-
-        self.ids.list_receive.clear_widgets(self.ids.list_receive.children)   
             
-        if state == 'p':
+        try:
+
+            self.clear_list()
+    
+            if state == 'p':
+                    
+                for order in self.manager.user.dict['origin_prep']:
+
+                    self.order_item(order, self.ids.list_send)
                 
-            for order in self.manager.user.dict['origin_prep']:
+                for order in self.manager.user.dict['destin_prep']:
 
-                self.order_item(order, self.ids.list_send)
+                    self.order_item(order, self.ids.list_receive)
+                
+                self.set_text('ESTADO: PREPARADO EN SUCURSAL', 'ENVIAR')
+
+            elif state == 'c':
             
-            for order in self.manager.user.dict['destin_prep']:
+                for order in self.manager.user.dict['origin_on_road']:
 
-                self.order_item(order, self.ids.list_receive)
+                    self.order_item(order, self.ids.list_send)
+                
+                for order in self.manager.user.dict['destin_on_road']:
 
-            self.ids.text_state.text = 'ESTADO: PREPARADO EN SUCURSAL'
+                    self.order_item(order, self.ids.list_receive)
 
-            self.ids.text_env.text = 'ENVIAR'
+                self.set_text('ESTADO: EN CAMINO', 'ENVIADO')
 
-        elif state == 'c':
-        
-            for order in self.manager.user.dict['origin_on_road']:
+        except:
 
-                self.order_item(order, self.ids.list_send)
-            
-            for order in self.manager.user.dict['destin_on_road']:
+            self.manager.len_lists.append(False)
 
-                self.order_item(order, self.ids.list_receive)
 
-            self.ids.text_state.text = 'ESTADO: EN CAMINO'
-
-            self.ids.text_env.text = 'ENVIADO'
-        else:
-
-            self.parent.go_snack('Complete los campos')
-
+    @mainthread
     def menu_open(self):
         
         menu_items = [
-            {"text": "PREPARADO EN SUCURSAL", "on_release": lambda x='p': self.get_orders(x)},
-            {"text": "EN CAMINO", "on_release": lambda x='p': self.get_orders(x)}
+            {
+            "text": "PREPARADO EN SUCURSAL",
+            "on_press:": lambda: self.manager.progress(self.manager.get_screen(self.manager.current)),
+            "on_release": lambda x='p': self.manager.go_screen(self.manager.current, [self.get_orders(x)], 'Error')
+            },
+            {
+            "text": "EN CAMINO", 
+            "on_press:": lambda: self.manager.progress(self.manager.get_screen(self.manager.current)),
+            "on_release": lambda x='c': self.manager.go_screen(self.manager.current, [self.get_orders(x)], 'Error')
+            }
         ]
-        MDDropdownMenu(
-            caller=self.ids.item_state, items=menu_items
-        ).open()
+        
+        self.menu= MDDropdownMenu(
+            caller=self.ids.item_state, 
+            items=menu_items,
+            position="bottom"
+        )
+
+        self.menu.open()
     
  

@@ -2,17 +2,11 @@ from kivymd.uix.screen import MDScreen
 from kivymd.uix.list import MDListItem, MDListItemLeadingIcon, MDListItemSupportingText, MDListItemTrailingCheckbox
 from kivy.clock import mainthread
 from kivymd.uix.dialog import MDDialog
-
-class CheckB(MDListItemTrailingCheckbox):
-
-    def check_active(self, checkbox, value):
-        
-        if value:
- 
-            self.parent.parent.parent.parent.parent.parent.parent.order_branch = checkbox.parent.parent.ids
+from models import deco
 
 class DialogCreate(MDDialog):
 
+    @mainthread
     def open_dialog(self, manager, branch):
 
         self.manager= manager
@@ -21,34 +15,36 @@ class DialogCreate(MDDialog):
 
         self.open()
 
-    def create_order(self, text):  
+    @deco
+    def create_order(self,):  
 
-        self.text=  text._get_text()
+        try:
 
-        if self.text == '':
-             
-             self.manager.go_snack('Describa su envío')
-        
-        else:
+            self.text=  self.ids.text_detail._get_text()
 
-            try: 
+            if self.text == '':
+                
+                self.manager.go_snack('Describa su envío')
+            
+            else:
 
                 create = self.manager.user.route_create(self.text, self.branch)
 
                 if create == 400:
                     
-                    self.manager.go_snack('Error de conexión')
-                       
+                    self.manager.go_snack('Error al crear pedido')
+                    
                 else:
-                    self.manager.go_snack('Envío creado con éxito')
+
+                    name= self.branch['name']
+
+                    self.manager.go_snack(f'Envío para {name}, creado con éxito')
                     
                     self.dismiss()
-                                
-            except:
-                
-                self.manager.go_snack('Error de conexión')
 
-                self.dismiss()
+        except:
+            
+            self.manager.len_lists.append(False)
 
 class OrderCreate(MDScreen):
     
@@ -64,28 +60,45 @@ class OrderCreate(MDScreen):
         except:
 
             self.manager.go_snack('Indique el destino')      
-                    
-    def branch_nodes(self,):
-           
+
+    @mainthread
+    def clear_nodes(self,):
+
         self.ids.mdlist.clear_widgets(self.ids.mdlist.children)
+
+    @mainthread
+    def add_node(self, node):
+
+        self.ids.mdlist.add_widget(MDListItem(
+                                    MDListItemLeadingIcon(
+                                        icon='map-marker-radius-outline',
+                                            ),
+                                            MDListItemSupportingText(
+                                                text= node['name'],
+                                            ),
+                                            CheckB(
+                                                    ),
+                                            ripple_effect= False,
+                                            ids= node
+                                                )
+                                                )
+
+    @deco
+    def branch_nodes(self,):
+
+        try:
         
-        if self.manager.user.id_user != {}:
-            
-            for node in self.manager.user.dict['nodes_origin']:
+            self.clear_nodes()
+
+            if self.manager.user.id_user != {}:
                 
-                self.ids.mdlist.add_widget(MDListItem(
-                                                    MDListItemLeadingIcon(
-                                                        icon='map-marker-radius-outline',
-                                                            ),
-                                                            MDListItemSupportingText(
-                                                                text= node['name'],
-                                                            ),
-                                                            CheckB(
-                                                                    ),
-                                                            ripple_effect= False,
-                                                            ids= node
-                                                                )
-                                                                )
+                for node in self.manager.user.dict['nodes_origin']:
+
+                    self.add_node(node)
+
+        except:
+
+            self.manager.len_lists.append(False)
 
     def on_checkbox_active(self, checkbox, value):
         
@@ -93,3 +106,10 @@ class OrderCreate(MDScreen):
 
             self.order_branch= checkbox.parent.parent.ids
 
+class CheckB(MDListItemTrailingCheckbox):
+
+    def check_active(self, checkbox, value):
+        
+        if value:
+ 
+            self.parent.parent.parent.parent.parent.parent.parent.order_branch = checkbox.parent.parent.ids

@@ -4,16 +4,16 @@ import time
 import socket
 import json
 from threading import Thread
-
+from kivy.clock import Clock
 
 def deco(funcion):
     
     def envolvente(*args):
-         
-        thread = Thread(target=funcion, args=args)
+                
+        thread = Thread(name= str(funcion),target=funcion, args=args)
 
         thread.start()
-        
+
         return thread
         
     return envolvente
@@ -126,6 +126,8 @@ class User(Route, Client):
 
         self.stop= False
 
+        self.clock= Clock
+
     def view_nodes(self, url):
         
         self.url= url
@@ -169,10 +171,6 @@ class User(Route, Client):
             id = self.client.post(self.url_login, data=login_data, headers=dict(Referer= self.url_login))
         
             self.id_user= id.json()['results'][0]         
-
-#            self.nodes_origin= self.view_nodes(self.url_origin)
-            
-#            self.nodes_destin= self.view_nodes(self.url_destin)
             
             self.url= self.url_perfil
 

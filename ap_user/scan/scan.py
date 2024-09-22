@@ -15,19 +15,18 @@ class Check(MDListItemTrailingCheckbox):
 
 class QrPrinter(MDScreen):
 
-    @deco  
     def print_order(self, instance, *args):
         
         try:
-            self.parent.user.conect()
+            self.manager.user.conect()
             
-            self.parent.user.send(instance.ids)
+            self.manager.user.send(instance.ids)
             
-            self.parent.user.disconnect()
+            self.manager.user.disconnect()
             
         except:
             
-            self.parent.go_snack('Error de conexión')
+            self.manager.go_snack('Error de conexión')
     
     @mainthread
     def order_item(self, order, list):
@@ -42,6 +41,7 @@ class QrPrinter(MDScreen):
                         MDListItemTertiaryText(
                             text= 'Para '+ order['destination_name'] + ', preparado el '+ order['preparation_date']
                         ),
+                        ripple_effect= False,
                         ids= order,
                         on_press= self.print_order
                     )
@@ -51,62 +51,59 @@ class QrPrinter(MDScreen):
     def get_prepared(self):
         
         try:
-            if self.parent.user.id_user != {}:
+            
+            if self.manager.user.id_user != {}:
                 
                 self.list_orders()
                 
         except:
             
-            self.parent.go_snack('Error de conexión')
+            self.manager.go_snack('Error de conexión')
     
     @mainthread
     def list_orders(self,):
         
         self.ids.mdlist.clear_widgets(self.ids.mdlist.children)
        
-        for order in self.parent.user.dict['origin_prep']:
+        for order in self.manager.user.dict['origin_prep']:
 
             self.order_item(order, self.ids.mdlist)
-                 
+
+    @deco             
     def conect_printer(self,):
+                
+        self.manager.user.conect()
         
-        try:
-            self.parent.user.conect()
-            
-            self.parent.user.send({'password':''})
-            
-            self.parent.user.disconnect()
+        self.manager.user.send({'password':''})
         
-        except:
+        self.manager.user.disconnect()
+        
+        self.list_printers()
+
             
-            self.parent.go_snack('Error de conexión')
-            
+    @mainthread
     def list_printers(self,):
         
         self.ids.mdlist.clear_widgets(self.ids.mdlist.children)
-        
-        try:
-        
-            for printer in self.parent.user.printers:
-        
-                self.ids.mdlist.add_widget(MDListItem(
-                                                    MDListItemLeadingIcon(  
-                                                        icon= 'printer'),
-                                                    MDListItemHeadlineText(
-                                                        text= str(printer[0]),
-                                                        ),
-                                                    MDListItemSupportingText(
-                                                        text= printer[1],
-                                                        ),
-                                                    MDListItemTertiaryText(
-                                                        text= printer[2],
-                                                        ),
-                                                    Check(
-                                                        ),
-                                                    ))
-        except:
-            
-            self.parent.go_snack('Error de conexión')
+               
+        for printer in self.manager.user.printers:
+    
+            self.ids.mdlist.add_widget(MDListItem(
+                                                MDListItemLeadingIcon(  
+                                                    icon= 'printer'),
+                                                MDListItemHeadlineText(
+                                                    text= str(printer[0]),
+                                                    ),
+                                                MDListItemSupportingText(
+                                                    text= printer[1],
+                                                    ),
+                                                MDListItemTertiaryText(
+                                                    text= printer[2],
+                                                    ),
+                                                Check(
+                                                    ),
+                                                    ripple_effect= False,
+                                                ))
 
 class QrDialog(MDDialog):
     
@@ -115,11 +112,11 @@ class QrDialog(MDDialog):
         
         self.open()
            
-    def text_card(self, dict, user):
+    def text_card(self, dict, manager):
         
         self.dict= dict
         
-        self.user= user 
+        self.manager= manager 
                 
         detail_text= self.status(dict)
         
@@ -169,13 +166,13 @@ class QrDialog(MDDialog):
         
         try:
     
-            self.user.on_road(str(self.dict['id']))
+            self.manager.user.on_road(str(self.dict['id']))
             
             self.close_card()
             
         except:
             
-            self.parent.go_snack('Error de conexión')
+            self.manager.len_lists.append(False)
         
 class ScanAnalyze(Preview):
     
@@ -207,8 +204,7 @@ class QrScreen(MDScreen):
  
     def focus(self,dt):
         
-        self.ids.scan.connect_camera(enable_analyze_pixels = True,
-                                             enable_video = False)
+        self.ids.scan.connect_camera(enable_analyze_pixels = True, enable_video = False)
 
     @deco
     def on_focus(self,):
@@ -220,51 +216,31 @@ class QrScreen(MDScreen):
         except:
 
             self.manager.len_lists.append(False)
-    
-    def get_qr_dialog(self,):  
         
-        self.qr_card= QrDialog()
-        
-        if self.parent.user.id_user != {}:
-                            
-            if self.text_qr != '':
-
-                self.manager.progress(self)
-
-                self.qr_result()  
-    
     @deco
     def qr_result(self,):
             
         try:
 
-            route= self.parent.user.view_road(self.text_qr)
+            route= self.manager.user.view_road(self.text_qr + '/')
             
             if route != 'Error!':
             
-                self.qr_card.text_card(route, self.parent.user)
+                self.qr_card.text_card(route, self.manager)
                 
                 self.qr_card.qr_open()
-                
-                self.clear_qr_text()
             
             else:
                 
-                self.qr_card.text_card(dict(qr= self.text_qr, msj= 'Qr Invalido'), self.parent.user)
+                self.qr_card.text_card(dict(qr= self.text_qr, msj= 'Qr Invalido'), self.manager)
                 
                 self.qr_card.qr_open()
-                
-                self.clear_qr_text()
-
-            self.manager.stop_progres(self)
 
         except:
             
-            self.manager.stop_progres(self)
+            self.manager.len_lists.append(False)
             
-            self.parent.go_snack('Error de conexión')
-            
-            self.clear_qr_text()
+        self.clear_qr_text()
       
     @mainthread
     def _close_cam(self,):
@@ -281,16 +257,17 @@ class QrScreen(MDScreen):
         except:
             
             self.manager.len_lists.append(False)
-     
+
+    @deco 
     def check_printer(self,):
         
         passwd, ip, port= self.text_qr.split('|')
         
-        self.parent.user.ip= ip
+        self.manager.user.ip= ip
         
-        self.parent.user.port= port
+        self.manager.user.port= port
         
-        self.parent.user.passwd= passwd
+        self.manager.user.passwd= passwd
         
     @mainthread
     def got_result(self, result):
@@ -300,15 +277,23 @@ class QrScreen(MDScreen):
             self.text_qr = result.data.decode('utf-8')
             
             if '|' in self.text_qr:
-                
-                self.check_printer()
-                
-                self.close_cam()
-                
-                self.parent.current= 'qrprinter' 
-                
-                self.parent.children[0].get_prepared()
-                                  
+
+                self.manager.progress(self)
+
+                self.manager.go_screen('qrprinter' , [self.check_printer(), self.close_cam(), self.manager.parent.ids.qr_printer.get_prepared(), self.clear_qr_text()], 'Error en QR')
+                                     
             else:
+                
+                self.manager.progress(self)
 
                 self.get_qr_dialog()
+
+    def get_qr_dialog(self,):  
+        
+        self.qr_card= QrDialog()
+        
+        if self.parent.user.id_user != {}:
+                            
+            if self.text_qr != '':
+
+                self.manager.go_screen(self.manager.current, [self.qr_result()], 'Error de conexión')

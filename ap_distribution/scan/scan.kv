@@ -62,7 +62,9 @@
             id: btn_rec
             disabled: True
             on_press:
-                root.receive_route() 
+                root.manager.progress(root.manager.get_screen(root.manager.current))
+            on_release:
+                root.manager.go_screen('qrscreen', [root.receive_route()], 'Error') 
             MDButtonIcon:
                 icon: 'package-variant-closed-plus'
             MDButtonText:

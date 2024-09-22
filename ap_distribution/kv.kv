@@ -7,12 +7,12 @@
 #: import LoginScreen,DialogIp login.login
 #: include login/login.kv
 
-#: import QrScreen,QrDialog,ScanAnalyze scan.scan
+#: import QrScreen,QrDialog,ScanAnalyze,QrPrinter,Check scan.scan
 #: include scan/scan.kv
 
 
 <RmScreenManager>
-<IconPasword>
+
 <Progress>
     id: progress
     pos_hint: {'center_x': .5, 'center_y': .5}
@@ -35,13 +35,6 @@
         id: snack_text
         pos_hint: {"center_x": .5}
 
-
-
-
-
-
-
-
 <BaseMDNavigationItem>
 
     MDNavigationItemIcon:
@@ -59,32 +52,35 @@ MDBoxLayout:
         type: "small"
         id: box_header
         theme_bg_color: "Custom"
+        id: title_ap
         md_bg_color: app.theme_cls.primaryColor
-           
+
+        MDBoxLayout:
+            pos_hint: {'center_x': 0.5,'center_y': 0.5}
+            FitImage:
+                source: './icons/aguila.png'
+                size_hint_x: self.parent.size_hint_x                
+                padding: 5
+
         MDTopAppBarLeadingButtonContainer:
-
-            MDActionTopAppBarButton:
-                id: switch_theme
-                icon: 'theme-light-dark'
-                on_release: app.switch_theme_style()
-
-        MDTopAppBarTitle:
-            
-            id: title_text
-            text: "Hoja de Ruta"
-            font_style: "Title"
-            bold: True  
-
-        MDTopAppBarTrailingButtonContainer:
-            pos_hint: {"center_x": 1}
 
             MDActionTopAppBarButton:
                 icon: "account-circle-outline"
                 id: btn_log
-                on_press: 
-                    root.ids.screen_manager.login_out(btn_log, [home_btn, qr_btn, branch_btn])
-                    root.ids.qr_screen.close_cam()
+                on_press:
+                    screen_manager.progress(screen_manager.get_screen(screen_manager.current))
+                on_release:   
+                    screen_manager.go_screen('loginscreen', [qr_screen.close_cam(),screen_manager.login_out(btn_log, [home_btn, qr_btn, branch_btn])], 'Error')
+        
+        MDTopAppBarTitle:
+            id: title_text
+            text: "Hoja de Ruta"
+            font_style: "Title"
+            bold: True  
  
+    MDDivider:
+        color: app.theme_cls.tercearyColor
+                  
     RmScreenManager:
         id: screen_manager
 
@@ -106,20 +102,19 @@ MDBoxLayout:
     MDNavigationBar:
         radius: 50, 50, 0, 0
         md_bg_color: app.theme_cls.secondaryContainerColor
-        line_color: self.theme_cls.primaryColor
-
+        line_color: app.theme_cls.tercearyColor
 
         BaseMDNavigationItem
             id: home_btn
             icon: "home"
             text: "Home"
             disabled: True
-            on_press: 
-                screen_manager.current= 'homescreen'
-                screen_manager.progress(home_screen)
-            on_release:
-                qr_screen.close_cam()
-                home_screen.get_count()                 
+            on_press:
+                screen_manager.progress(screen_manager.get_screen(screen_manager.current))
+            on_release:             
+                screen_manager.go_screen('homescreen', [qr_screen.close_cam(), home_screen.get_orders()], 'Error')
+
+              
 
         BaseMDNavigationItem
             id: qr_btn
@@ -127,10 +122,11 @@ MDBoxLayout:
             text: "Qr-Scan"
             disabled: True
             on_press:
-                screen_manager.progress(qr_screen)
-                screen_manager.current= 'qrscreen'     
-            on_release:
-                qr_screen.on_focus()
+                screen_manager.progress(screen_manager.get_screen(screen_manager.current))
+            on_release: 
+                screen_manager.go_screen('qrscreen', [qr_screen.on_focus()], 'Error')
+            
+                
 
         BaseMDNavigationItem
             id: branch_btn
@@ -138,11 +134,12 @@ MDBoxLayout:
             text: "Sucursales"
             disabled: True
             on_press:
-                screen_manager.current= 'branchscreen' 
-            on_release:
-                qr_screen.close_cam()   
-                branch_screen.branch_nodes(branch_details)
+                screen_manager.progress(screen_manager.get_screen(screen_manager.current))
+            on_release:    
+                screen_manager.go_screen('branchscreen', [qr_screen.close_cam(), branch_screen.branch_nodes()], 'Error')            
+
                 
+             
               
             
 

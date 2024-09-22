@@ -1,6 +1,44 @@
+<DialogIp>
+    id: dialog_ip
+    auto_dismiss: False
+    size_hint_x: .9
+    MDDialogContentContainer:
+
+        MDTextField:
+            id: url
+            text: app.ip
+            mode: 'outlined'
+            radius: 0, 40, 40, 40
+            size_hint_x: .95
+            write_tab: False
+            on_text: self.text = self.text.replace(" ", "")
+            MDTextFieldHintText:
+                text: 'Direccion'
+            MDTextFieldTrailingIcon:   
+                icon: 'ip-network'
+
+    MDDialogButtonContainer:
+        spacing:"8dp"
+        MDButton:
+            on_press: 
+                root.close_card()
+            MDButtonText:
+                text:"Cerrar"
+                theme_text_color: "Custom"
+                text_color: app.theme_cls.tercearyColor
+        
+        MDButton:
+            on_press:
+                root.save_ip(url)
+            on_release:
+                root.close_card()
+            MDButtonText:
+                text:'Guardar'
+                theme_text_color: "Custom"
+                text_color: app.theme_cls.tercearyColor
 <LoginScreen>
     name: 'loginscreen'
-    
+    id: login
     MDTextField:
         id: username
         text: app.user
@@ -33,6 +71,7 @@
 
     MDCheckbox:
         id: cb
+        color_active: app.theme_cls.tercearyColor
         size_hint: None, None
         width: "30dp"
         height: "30dp"
@@ -50,53 +89,26 @@
         on_press:
             root.parent.progress(root)
         on_release:        
-            root.login_a(username, password)
+            root.parent.go_screen('homescreen',[root.login_a()],'Login incorrecto')
         
         MDButtonText:
             id: text
             text:'Login'
             pos_hint: {"center_x": .5, "center_y": .5}
-        
+            theme_text_color: "Custom"
+            text_color: app.theme_cls.tercearyColor
         MDButtonIcon:
             icon: 'login'
+            theme_icon_color: "Custom"
+            icon_color: app.theme_cls.tercearyColor
             x: text.x - (self.width + dp(10))
     
     MDFabButton:
         style:'standard' 
         icon: 'ip-network'
         color_map: 'surface'
+        theme_icon_color: "Custom"
+        icon_color: [0.8745098039215686, 0.8901960784313725, 0.9058823529411765, 1.0]
         pos_hint: {"center_x": .9, 'center_y': .1}
-        line_color: app.theme_cls.primaryColor
+        line_color: [0.8745098039215686, 0.8901960784313725, 0.9058823529411765, 1.0]
         on_press: root.open_ipdialog()
-<DialogIp>
-    id: dialog_ip
-    auto_dismiss: False
-    size_hint_x: .9
-    MDDialogContentContainer:
-
-        MDTextField:
-            id: url
-            text: app.ip
-            mode: 'outlined'
-            radius: 0, 40, 40, 40
-            size_hint_x: .95
-            write_tab: False
-            on_text: self.text = self.text.replace(" ", "")
-            MDTextFieldHintText:
-                text: 'Direccion'
-            MDTextFieldTrailingIcon:   
-                icon: 'ip-network'
-
-    MDDialogButtonContainer:
-        spacing:"8dp"
-        MDButton:
-            on_press: 
-                root.close_card()
-            MDButtonText:
-                text:"Cerrar"
-        
-        MDButton:
-            on_press:
-                root.save_ip(url)
-            MDButtonText:
-                text:'Guardar'

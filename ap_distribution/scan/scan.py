@@ -16,11 +16,11 @@ class QrDialog(MDDialog):
         
         self.open()
                 
-    def text_card(self, dict, user):
+    def text_card(self, dict, manager):
         
         self.dict= dict
         
-        self.user= user 
+        self.manager= manager 
                 
         detail_text= self.status(dict)
         
@@ -46,15 +46,17 @@ class QrDialog(MDDialog):
                 self.ids.btn_rec.disabled= False
                 
                 detail_text= 'Envio n° {id}, preparado el dia {date} a las {time}'.format(
-                    id= str(dict['id']),
-                    date= dict['preparation_date'],
-                    time= dict['preparation_time'],
-                ) 
+                                                                                        id= str(dict['id']),
+                                                                                        date= dict['preparation_date'],
+                                                                                        time= dict['preparation_time'],
+                                                                                           ) 
             
             elif dict['status'] == 'c':
+                
                 detail_text= 'Envio n° {id} en camino'.format(id= str(dict['id']))
             
             else:
+                
                 detail_text= 'Envio n° {id} recibido'.format(id= str(dict['id']))
             
             return detail_text
@@ -70,13 +72,13 @@ class QrDialog(MDDialog):
         
         try:
     
-            self.user.on_road(str(self.dict['id']))
+            self.manager.user.on_road(str(self.dict['id']))
         
             self.close_card()
         
         except:
             
-            self.parent.go_snack('Error de conexión')
+            self.manager.len_lists.append(False)
              
 class ScanAnalyze(Preview):
     
@@ -84,8 +86,8 @@ class ScanAnalyze(Preview):
     
     @deco
     def analyze_pixels_callback(self, pixels, image_size, image_pos, scale, mirror):
-        
-        pimage=Image.frombytes(mode='RGBA', size=image_size, data=pixels)
+
+        pimage=Image.frombytes(mode='RGBA',size=image_size,data=pixels)
         
         list_of_all_barcodes=decode(pimage)
         
@@ -105,23 +107,74 @@ class QrScreen(MDScreen):
         sleep(5)
         
         self.text_qr= ''
-    
-    @mainthread    
-    def focus(self,):
+ 
+    def focus(self,dt):
         
-        self.ids.scan.enable_analyze_pixels= True
+        self.ids.scan.connect_camera(enable_analyze_pixels = True, enable_video = False)
 
-        self.ids.scan.connect_camera(enable_analyze_pixels = True )
-
-        self.parent.stop_progres(self)
-        
     @deco
     def on_focus(self,):
+
+        try:
+            
+            self.manager.user.clock.schedule_once(self.focus)
+
+        except:
+
+            self.manager.len_lists.append(False)
         
-        sleep(.5)
-        
-        self.focus()        
+    @deco
+    def qr_result(self,):
+            
+        try:
+
+            route= self.manager.user.view_road(self.text_qr + '/')
+            
+            if route != 'Error!':
+            
+                self.qr_card.text_card(route, self.manager)
+                
+                self.qr_card.qr_open()
+            
+            else:
+                
+                self.qr_card.text_card(dict(qr= self.text_qr, msj= 'Qr Invalido'), self.manager)
+                
+                self.qr_card.qr_open()
+
+        except:
+            
+            self.manager.len_lists.append(False)
+            
+        self.clear_qr_text()
+      
+    @mainthread
+    def _close_cam(self,):
+
+        self.ids.scan.disconnect_camera()
     
+    @deco
+    def close_cam(self,):
+        
+        try:
+            
+            self._close_cam()
+ 
+        except:
+            
+            self.manager.len_lists.append(False)
+        
+    @mainthread
+    def got_result(self, result):
+        
+        if self.text_qr != result.data.decode('utf-8'):
+            
+            self.text_qr = result.data.decode('utf-8')
+                
+            self.manager.progress(self)
+
+            self.get_qr_dialog()
+
     def get_qr_dialog(self,):  
         
         self.qr_card= QrDialog()
@@ -130,56 +183,7 @@ class QrScreen(MDScreen):
                             
             if self.text_qr != '':
 
-                self.qr_result()
-    
-    @deco
-    def qr_result(self,):
-        
-        try:    
-            
-            route= self.parent.user.view_road(self.text_qr)
-                    
-            if route != 'Error!':
-                    
-                self.qr_card.text_card(route, self.parent.user)
-                
-                self.qr_card.qr_open()
-                
-                self.clear_qr_text()
-                    
-            else:
-                
-                self.qr_card.text_card(dict(qr= self.text_qr, msj= 'Qr Invalido'), self.parent.user)
-                
-                self.qr_card.qr_open()
-                
-                self.clear_qr_text()
-
-        except:
-            
-            self.parent.go_snack('Error de conexión')
-            
-            self.clear_qr_text()
-
-    def close_cam(self,):
-        
-        try:
-            self.enable_analyze_pixels = False 
-            
-            self.ids.scan.disconnect_camera()
-            
-        except:
-            
-            pass
-            
-    @mainthread
-    def got_result(self, result):
-        
-        if self.text_qr != result.data.decode('utf-8'):
-            
-            self.text_qr = result.data.decode('utf-8')
-
-            self.get_qr_dialog()
+                self.manager.go_screen(self.manager.current, [self.qr_result()], 'Error de conexión')
 
 
         

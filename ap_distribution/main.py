@@ -8,12 +8,9 @@ from kivy.storage.jsonstore import JsonStore
 from kivymd.uix.snackbar import MDSnackbar
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivy.clock import mainthread
-
-import models  
-
-#from android.permissions import request_permissions, Permission
-
-#request_permissions([Permission.CAMERA, Permission.INTERNET])
+from android_permissions import AndroidPermissions
+import models   
+from time import sleep
 
 class Progress(MDFloatLayout):
     pass
@@ -27,37 +24,90 @@ class BaseMDNavigationItem(MDNavigationItem):
     text = StringProperty()
  
 class RmScreenManager(MDScreenManager):
-    
+
+    @mainthread
+    def login_out_btn(self, btns):
+
+        for btn in btns:
+
+            btn.disabled= True
+
     @models.deco
-    def log_out(self,):
-            
-        self.progress(self.get_screen(self.current))
-
-        try:
-                
-            self.user.logOut()
-            
-        except:
-                
-            self.go_snack('Error de conexión')
-            
-        self.stop_progres(self.get_screen(self.current))
-
     def login_out(self, log, btns):
-        
-        self.current= 'loginscreen'
         
         if log.icon != 'account-circle-outline': 
             
-            self.log_out()
+            self.user.logOut()
+
+            self.event.cancel()
             
             log.icon= 'account-circle-outline'
+
+            self.login_out_btn(btns)
             
-            for btn in btns:
+    @mainthread
+    def change_screen(self, screen):
+
+        self.current= screen
+
+    @models.deco
+    def len_list(self, screen):
+
+        while True:
+
+            if False in self.len_lists:
+
+                self.stop_progres(self.get_screen(self.pre_screen))
+
+                self.go_snack(self.msj)
+
+                break
+
+
+            if len(self.len_lists) == len(self.list):
+
+                if not False in self.len_lists:
+
+                    self.change_screen(screen)
+
+                    self.stop_progres(self.get_screen(self.pre_screen))
+
+                    break
+
+            sleep(0.1)
+
+    @models.deco
+    def hilo(self,funcion):
+            
+        while True:
+
+            if funcion.is_alive() == False:
+
+                self.len_lists.append(True)
+
+                break
                 
-                btn.disabled= True
-    
-    @mainthread            
+            sleep(0.1)
+
+    def go_screen(self, screen, list, msj):
+
+        self.list = list
+
+        self.len_lists = []
+
+        self.pre_screen = self.current
+
+        self.msj = msj
+
+        for funcion in list:
+
+            funcion= funcion
+
+            self.hilo(funcion)
+
+        self.len_list(screen)
+
+    @mainthread 
     def go_snack(self, mnj):
         
         self.snack= Snack()
@@ -77,16 +127,26 @@ class RmScreenManager(MDScreenManager):
     def stop_progres(self, screen):
             
         screen.remove_widget(self.progres)
-    
+
     user= models.User()
+
+    event= ''
 
 class RoadMapsApp(MDApp):
     
-    icon= 'truck.png'       
-    
-    store = JsonStore('load.json')
-      
+    icon= 'icons/truck.png'
+
+    def on_start(self):
+        
+        self.dont_gc = AndroidPermissions(self.start_app)
+
+    def start_app(self):
+        
+        self.dont_gc = None
+        
     def load_log(self,):
+
+        self.store = JsonStore('load.json')
         
         try:
         
@@ -108,44 +168,35 @@ class RoadMapsApp(MDApp):
             
                 self.ip= ''
     
-    def build(self):
+    def on_checkbox_active(self, checkbox, value):
 
-        self.theme_cls.primary_palette = "Blue"
+        if value:
+    
+            self.root.ids.screen_manager.user.printer= checkbox.parent.parent.children[1].children[0].children[0].text    
+
+            self.store.put('print', print= self.root.ids.screen_manager.user.printer )
+    
+    def build(self):
         
         self.set_bars_colors()
-       
-        self.theme_cls.theme_style = "Dark"    
- 
+
         self.theme_cls.primary_hue = "A700"
+       
+        self.theme_cls.theme_style = "Dark"  
 
-        self.theme_cls.primaryColor= [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0]
+        self.theme_cls.primaryColor= [0.08232529, 0.0745098, 0.521569, 1.0]  
 
-        self.load_log()
-
-        return Builder.load_file('kv.kv')
-    
-    def switch_theme_style(self):
+        self.theme_cls.tercearyColor= [0.913725, 0.501961, 0.137255, 1.0]
         
-        if self.theme_cls.theme_style == "Dark":
-            
-            self.theme_cls.theme_style= 'Light'
-            self.theme_cls.primaryColor= [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0]
-            
-            self.root.ids.title_text.color= [0.8745098039215686, 0.8901960784313725, 0.9058823529411765, 1.0]
-            self.root.ids.btn_log.color= [0.8745098039215686, 0.8901960784313725, 0.9058823529411765, 1.0]
-            self.root.ids.switch_theme.color= [0.8745098039215686, 0.8901960784313725, 0.9058823529411765, 1.0]
-            
-        else:
-            
-            self.theme_cls.theme_style = "Dark"
-            self.theme_cls.primaryColor= [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0]
-         
-         
+        self.load_log()
+ 
+        return Builder.load_file('kv.kv')
+                
     def set_bars_colors(self):
         
         set_bars_colors(
-            [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0],  # status bar color
-            [0.1843137254901961, 0.21176470588235294, 0.5176470588235295, 1.0],  # navigation bar color
+            [0.08232529, 0.0745098, 0.521569, 1.0] ,  # status bar color
+            [0.08232529, 0.0745098, 0.521569, 1.0],  # navigation bar color
             "Light",      # icons color of status bar
         )
     

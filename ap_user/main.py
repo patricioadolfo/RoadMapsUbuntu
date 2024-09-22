@@ -55,8 +55,6 @@ class RmScreenManager(MDScreenManager):
 
         while True:
 
-            print(len(self.len_lists))
-
             if False in self.len_lists:
 
                 self.stop_progres(self.get_screen(self.pre_screen))

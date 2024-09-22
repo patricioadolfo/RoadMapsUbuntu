@@ -1,36 +1,94 @@
 <HomeScreen>
     name: 'homescreen'
     
-    MDLabel:
-        size_hint_y: .2
-        id: text_home
-        pos_hint: {'center_x': .5,"center_y": .9}
-        bold: True
-        font_style: "Title"
-        halign: "center"
-
-    MDDivider:
-    
+    MDBoxLayout:
+        orientation: 'vertical'
         
-    MDList:
+        MDBoxLayout:
+            size_hint_y: .1
+            
+            MDLabel:
+                id: text_home
+                padding: 10
+                pos_hint_x: .5
+                bold: True
+                font_style: "Title"
+                halign: "left"
 
-        id: container
+        MDDivider:
+
+        MDBoxLayout:
+            orientation: 'vertical'
+            size_hint_y: .2
+                
+            MDListItem:
+                ripple_effect: False 
         
-        MDListItem: 
-            
-            MDListItemSupportingText:
-                id: text_prepared
-            MDListItemTrailingIcon:
-                icon: 'package-variant-closed-plus'
-                id: icon_prep
+                MDListItemSupportingText:
+                    id: text_prepared
+        
+                MDListItemTrailingIcon:
+                    icon: 'package-variant-closed-plus'
+                    id: icon_prep
 
 
-        MDListItem: 
+            MDListItem: 
+                ripple_effect: False
+
+                MDListItemSupportingText:
+                    id: text_onroad
+                
+                MDListItemTrailingIcon:
+                    icon: 'package-variant-closed-minus'
+                    id: icon_onroad
+
+        MDDivider:
+
+        MDBoxLayout:
+            id: box_tabs
+            size_hint_y: .7
             
-            MDListItemSupportingText:
-                id: text_onroad
-            MDListItemTrailingIcon:
-                icon: 'package-variant-closed-minus'
-                id: icon_onroad
+            MDTabsSecondary:
+                id: tabs
+                size_hint_y: 1
+
+                MDDivider:
+
+                MDTabsItem:
+                    ripple_effect: False
+
+                    MDTabsItemText:
+                        text: 'RETIRAR'
+                        bold: True
+            
+                MDTabsItem:
+                    ripple_effect: False
+
+                    MDTabsItemText:
+                        text: 'ENTREGAR'
+                        bold: True
+                
+                MDTabsCarousel:
+                    size_hint_y: None
+                    size_hint_y: .8
+                    
+                    MDBoxLayout:
+
+                        MDScrollView:
+                            do_scroll_x: False
+                            
+                            MDList:
+                                id: list_prepared
+
+
+                    MDBoxLayout:
+                        
+                        MDScrollView:
+                            do_scroll_x: False
+                            
+                            MDList:
+                                id: list_onroad
+
+
 
 

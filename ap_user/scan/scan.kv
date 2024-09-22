@@ -1,5 +1,7 @@
 <Check>
     color_active: app.theme_cls.tercearyColor
+    ripple_effect: False
+    size_hint: None, None
     group: 'group'
     on_active: app.on_checkbox_active(*args)
 
@@ -21,7 +23,6 @@
                 text: 'Imprimir' 
                 halign: 'center'
                 font_style: "Title"
-                color: app.theme_cls.primaryColor
                 bold: True       
                 pos_hint: {'center_x': .5, 'center_y': .5}
             MDFabButton:
@@ -30,9 +31,9 @@
                 color_map: 'surface'
                 pos_hint: {"center_x": .8, 'center_y': .5}
                 line_color: [0.047058823529411764, 0.403921568627451, 0.5019607843137255, 1.0]
-                on_press: 
-                    root.conect_printer()
-                    root.list_printers()
+                on_press:
+                    root.manager.go_screen('qrprinter',[root.conect_printer()], 'Error de conexión')
+
             MDFabButton:
                 style:'standard' 
                 icon:"package-variant" 
@@ -119,7 +120,9 @@
             id: btn_rec
             disabled: True
             on_press:
-                root.receive_route() 
+                root.manager.progress(root.manager.get_screen(root.manager.current))
+            on_release:
+                root.manager.go_screen('qrscreen', [root.receive_route()], 'Error') 
             MDButtonIcon:
                 icon: 'package-variant-closed-plus'
                 theme_icon_color: "Custom"

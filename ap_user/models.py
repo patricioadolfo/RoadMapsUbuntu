@@ -75,7 +75,7 @@ class Route:
         
     def get_url(self, id= ''):
 
-        r= self.client.get( self.url + id)
+        r= self.client.get( self.url + id )
 
         if r.status_code == 200:
             

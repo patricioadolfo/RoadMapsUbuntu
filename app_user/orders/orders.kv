@@ -1,0 +1,57 @@
+<CheckB>
+    color_active: app.theme_cls.tercearyColor
+    ripple_effect: False
+    size_hint: None, None
+    width: "20dp"
+    height: "20dp"
+    group: 'group'
+    on_active: root.check_active(*args) 
+        
+<OrderCreate>
+    name: 'ordercreatescreen'
+    
+    MDBoxLayout:
+        orientation: 'vertical'
+    
+        MDBoxLayout:
+            orientation: 'horizontal'
+            padding:10
+            size_hint_y: .1
+        
+            MDLabel:
+                text: 'Nuevo envio' 
+                halign: 'center'
+                font_style: "Title"
+                bold: True       
+                pos_hint: {'center_x': .5, 'center_y': .5}
+
+        MDDivider:
+        
+        MDBoxLayout:
+            size_hint_y: .9
+
+            MDScrollView:
+                do_scroll_x: False
+
+                MDList:
+                    id: mdlist
+
+    MDExtendedFabButton:
+        style:'large' 
+        color_map: 'secondary'
+        pos_hint: {"center_x": .8, "center_y": .1}
+        fab_state: "expand"
+        line_color: app.theme_cls.tercearyColor
+        on_press: 
+            root.open_dialog()
+ 
+        MDExtendedFabButtonIcon:
+            icon: "plus"
+            theme_icon_color: "Custom"
+            icon_color: app.theme_cls.tercearyColor
+
+        MDExtendedFabButtonText:
+            text: "Crear"
+            theme_text_color: "Custom"
+            text_color: app.theme_cls.tercearyColor
+            

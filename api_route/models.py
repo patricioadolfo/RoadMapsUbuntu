@@ -1,3 +1,10 @@
-from django.db import models
+from django.db.models import Q
+import json
 
-# Create your models here.
+class QueryDict():
+
+    def dict_query(self, dict):
+        
+        d= json.loads(dict)
+        
+        self.q_objects = [Q(**{k: v}) for k, v in d.items()]

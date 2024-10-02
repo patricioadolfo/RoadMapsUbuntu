@@ -1,0 +1,96 @@
+#: import RmScreenManager,Progress,Snack manager.manage
+#: include manager/manage.kv
+
+
+<BaseMDNavigationItem>
+
+    MDNavigationItemIcon:
+        icon: root.icon
+
+    MDNavigationItemLabel:
+        text: root.text
+
+
+MDBoxLayout:
+    orientation: "vertical"
+    md_bg_color: app.theme_cls.backgroundColor
+    
+    MDTopAppBar:
+        type: "small"
+        id: box_header
+        theme_bg_color: "Custom"
+        id: title_ap
+        md_bg_color: app.theme_cls.primaryColor
+
+        MDBoxLayout:
+            pos_hint: {'center_x': 0.5,'center_y': 0.5}
+            
+            FitImage:
+                source: './icons/aguila.png'
+                size_hint_x: self.parent.size_hint_x                
+                padding: 5
+
+        MDTopAppBarLeadingButtonContainer:
+
+            MDActionTopAppBarButton:
+                icon: "account-circle-outline"
+                id: btn_log
+                on_press:
+                    screen_manager.progress(screen_manager.get_screen(screen_manager.current))
+                on_release:   
+                    screen_manager.go_screen('loginscreen', [screen_manager.ids.qr_screen.close_cam(),screen_manager.login_out(btn_log, [home_btn, qr_btn, order_btn])], 'Error')
+        
+        MDTopAppBarTitle:
+            id: title_text
+            text: "Hoja de Ruta"
+            font_style: "Title"
+            bold: True  
+ 
+    MDDivider:
+        color: app.theme_cls.tercearyColor
+                  
+    RmScreenManager:
+        id: screen_manager
+
+    MDNavigationBar:
+        radius: 50, 50, 0, 0
+        md_bg_color: app.theme_cls.secondaryContainerColor
+        line_color: app.theme_cls.tercearyColor
+
+        BaseMDNavigationItem
+            id: home_btn
+            icon: "home"
+            text: "Home"
+            disabled: True
+            on_press:
+                screen_manager.progress(screen_manager.get_screen(screen_manager.current))
+            on_release:             
+                screen_manager.go_screen('homescreen', [screen_manager.ids.qr_screen.close_cam()], 'Error')
+
+        BaseMDNavigationItem
+            id: qr_btn
+            icon: "qrcode-scan"
+            text: "Qr-Scan"
+            disabled: True
+            on_press:
+                screen_manager.progress(screen_manager.ids.qr_screen)
+                screen_manager.change_screen('qrscreen')
+            on_release:  
+                screen_manager.go_cam()
+        
+        BaseMDNavigationItem
+            id: order_btn
+            icon: "package-variant-closed"
+            text: "Nuevo"
+            disabled: True
+            on_press:
+                screen_manager.progress(screen_manager.get_screen(screen_manager.current))
+            on_release:    
+                screen_manager.go_screen('ordercreatescreen', [screen_manager.ids.qr_screen.close_cam(), screen_manager.ids.order_create.branch_nodes()], 'Error')            
+
+                
+             
+              
+            
+
+

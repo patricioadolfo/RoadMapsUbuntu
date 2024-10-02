@@ -1,25 +1,14 @@
-from .serializers import RouteSerializer, OriginSerializer, DestinationSerializer, instanceSerializer, UserSerializer, PerfilSerializer
+from .serializers import RouteSerializer, OriginSerializer, DestinationSerializer, instanceSerializer, UserSerializer, PerfilSerializer, PrintJobSerializer
 from rest_framework import permissions, viewsets
-from route import models
+from route import models as routemodels
+from .models import QueryDict
 from django.contrib.auth.models import User 
-from django.db.models import Q
-import json
-#from myapp.models import User
-#user_dict = {'name': 'Charlie', 'age': 40}
-#q_objects = [Q(**{k: v}) for k, v in user_dict.items()]
-#queryset = User.objects.filter(*q_objects)
-
-class QueryDict():
-
-    def dict_query(self, dict):
-        
-        d= json.loads(dict)
-        
-        self.q_objects = [Q(**{k: v}) for k, v in d.items()]
 
 class RouteSerializerViewSet(viewsets.ModelViewSet, QueryDict):
 
-    queryset = models.Route.objects.all().order_by('-preparation_date')
+    state= None
+
+    queryset = routemodels.Route.objects.all().order_by('-preparation_date')
     serializer_class = RouteSerializer
     permission_classes = [permissions.IsAuthenticated]
     
@@ -33,28 +22,31 @@ class RouteSerializerViewSet(viewsets.ModelViewSet, QueryDict):
             
                 self.dict_query(query)
             
-                return models.Route.objects.filter(*self.q_objects)
+                return routemodels.Route.objects.filter(*self.q_objects)
         
             else:
-                return models.Route.objects.all().order_by('-preparation_date')
+
+                return routemodels.Route.objects.all().order_by('-preparation_date')
+
         else:
-            return models.Route.objects.all().order_by('-preparation_date')
+                
+            return routemodels.Route.objects.all().order_by('-preparation_date')
 
 class InstanceSerializerViewSet(viewsets.ModelViewSet, QueryDict):
 
-    queryset = models.RouteInstance.objects.all().order_by('route')
+    queryset = routemodels.RouteInstance.objects.all().order_by('route')
     serializer_class = instanceSerializer
     permission_classes = [permissions.IsAuthenticated]
     
 class OriginSerializerViewSet(viewsets.ModelViewSet, QueryDict):
 
-    queryset = models.NodeOrigin.objects.all().order_by('id')
+    queryset = routemodels.NodeOrigin.objects.all().order_by('id')
     serializer_class = OriginSerializer
     permission_classes = [permissions.IsAuthenticated]
     
 class DestinationSerializerViewSet(viewsets.ModelViewSet, QueryDict):
 
-    queryset = models.NodeDestination.objects.all().order_by('name')
+    queryset = routemodels.NodeDestination.objects.all().order_by('name')
     serializer_class = DestinationSerializer
 
     permission_classes =[permissions.IsAuthenticated]
@@ -70,7 +62,7 @@ class UserSerializerViewSet(viewsets.ModelViewSet, QueryDict):
     
 class PerfilSerializerViewSet(viewsets.ModelViewSet, QueryDict):
     
-    queryset= models.Perfil.objects.all()
+    queryset= routemodels.Perfil.objects.all()
     serializer_class= PerfilSerializer
     permission_classes= [permissions.IsAuthenticated]
     
@@ -84,10 +76,31 @@ class PerfilSerializerViewSet(viewsets.ModelViewSet, QueryDict):
             
                 self.dict_query(query)
             
-                return models.Perfil.objects.filter(*self.q_objects)
+                return routemodels.Perfil.objects.filter(*self.q_objects)
         
             else:
-                return models.Perfil.objects.all()
+                return routemodels.Perfil.objects.all()
 
+class PrintJobSerializerViewSet(viewsets.ModelViewSet, QueryDict):
+
+    queryset= routemodels.PrintJob.objects.all()
+    
+    serializer_class= PrintJobSerializer
+    
+    permission_classes= [permissions.IsAuthenticated]
+    
+    def get_queryset(self):
         
-   
+        if self.request.method == 'GET':
+            
+            query = self.request.GET.get('q', None)
+            
+            if query is not None:
+            
+                self.dict_query(query)
+            
+                return routemodels.PrintJob.objects.filter(*self.q_objects)
+        
+            else:
+
+                return routemodels.PrintJob.objects.all()

@@ -25,9 +25,9 @@
               <tbody>
                 {% for route in route_list %}
                   
-                  {% if route.status == 'p'%}
+                  {% if route.status == 1%}
                     <tr class="table-danger">
-                  {% elif route.status == 'c'%} 
+                  {% elif route.status == 2%} 
                     <tr class="table-warning">
                   {% else %} 
                     <tr class="table-success">

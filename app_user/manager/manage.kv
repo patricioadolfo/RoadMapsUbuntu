@@ -1,0 +1,51 @@
+#: import HomeScreen home.home
+#: include home/home.kv
+
+#: import OrderCreate,CheckB orders.orders
+#: include orders/orders.kv
+
+#: import LoginScreen login.login
+#: include login/login.kv
+
+#: import QrScreen,ScanAnalyze scan.scan
+#: include scan/scan.kv
+
+#:include dialogs/dialog.kv
+
+
+<RmScreenManager>
+    id: screen_manager
+
+    LoginScreen:
+        id: login_screen
+    
+    HomeScreen:
+        id: home_screen
+
+    QrScreen:
+        id: qr_screen
+
+    OrderCreate:
+        id: order_create
+
+<Progress>
+    id: progress
+    pos_hint: {'center_x': .5, 'center_y': .5}
+    size_hint: None, None
+    size: "49dp", "50dp"
+    md_bg_color: app.theme_cls.transparentColor
+
+    MDCircularProgressIndicator:
+        size_hint: None, None
+        size: "48dp", "48dp"
+        pos_hint: {'center_x': .5, 'center_y': .5}
+
+<Snack>
+    y: dp(14)
+    orientation: "horizontal"
+    pos_hint: {"center_x": .5, "center_y": .5}
+    size_hint_x: .5
+
+    MDSnackbarSupportingText:
+        id: snack_text
+        pos_hint: {"center_x": .5}

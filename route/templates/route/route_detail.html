@@ -33,17 +33,17 @@
   <p> El dia {{route.preparation_date}} a las {{route.preparation_time}}, por {{ route.user }}</p>
   {% for instance in route.routeinstance_set.all %}
     
-    {% if instance.status == 'c' %}
+    {% if instance.status == 2 %}
       <li><strong>Pedido en camino</strong></li>
       <p> el dia {{instance.instance_date}} a las {{instance.instance_time}}, por {{ instance.user }}</p>
     {% endif %}
       
-    {% if instance.status == 'e' %}
+    {% if instance.status == 1 %}
       <li><strong>Pedido en entregado</strong></li>
       <p> el dia {{instance.instance_date}} a las {{instance.instance_time}}, por {{ instance.user }}</p>
     {% endif %}  
     
-    {% if instance.status == 'r' %}
+    {% if instance.status == 3 %}
       <li><strong>Pedido en recibido</strong></li>
       <p> el dia {{instance.instance_date}} a las {{instance.instance_time}}, por {{ instance.user }}</p>
   {% endif %}

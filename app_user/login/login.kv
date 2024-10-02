@@ -1,0 +1,83 @@
+
+<LoginScreen>
+    name: 'loginscreen'
+    id: login
+    
+    MDTextField:
+        id: username
+        text: app.user
+        mode: 'outlined'
+        size_hint_x: .7
+        pos_hint: {'center_x': .5, 'center_y': .75}
+        on_text: self.text = self.text.replace(" ", "")
+        write_tab: False
+        radius: 0, 40, 40, 40
+        
+        MDTextFieldHintText:
+            text: 'Usuario'
+        
+        MDTextFieldTrailingIcon:
+            icon: "account"
+            
+    MDTextField:
+        id: password
+        text: app.passwd
+        mode: 'outlined'
+        password: True
+        size_hint_x: .7
+        radius: 0, 40, 40, 40
+        pos_hint: {'center_x': .5, 'center_y': .60}
+        on_text: self.text = self.text.replace(" ", "")
+        write_tab: False
+        
+        MDTextFieldHintText:
+            text: 'Contraseña'
+        
+        MDTextFieldTrailingIcon:
+            id: eye_pswd      
+            icon: 'eye-off'
+
+    MDCheckbox:
+        id: cb
+        color_active: app.theme_cls.tercearyColor
+        size_hint: None, None
+        width: "30dp"
+        height: "30dp"
+        pos_hint: {'center_x': .8, 'center_y': .5}
+        on_press: 
+            password.password = False  if password.password == True else True
+            eye_pswd.icon = "eye" if eye_pswd.icon == "eye-off" else "eye-off"        
+
+    MDButton:
+        theme_width: "Custom"
+        height: "56dp"
+        size_hint_x: .7
+        pos_hint: {'center_x': .5, 'center_y': .4}
+        style: "outlined"
+        on_press:
+            root.parent.progress(root)
+        on_release:        
+            root.parent.go_screen('homescreen',[root.login_a()],'Login incorrecto')
+        
+        MDButtonText:
+            id: text
+            text:'Login'
+            pos_hint: {"center_x": .5, "center_y": .5}
+            theme_text_color: "Custom"
+            text_color: app.theme_cls.tercearyColor
+        
+        MDButtonIcon:
+            icon: 'login'
+            theme_icon_color: "Custom"
+            icon_color: app.theme_cls.tercearyColor
+            x: text.x - (self.width + dp(10))
+    
+    MDFabButton:
+        style:'standard' 
+        icon: 'ip-network'
+        color_map: 'surface'
+        theme_icon_color: "Custom"
+        icon_color: [0.8745098039215686, 0.8901960784313725, 0.9058823529411765, 1.0]
+        pos_hint: {"center_x": .9, 'center_y': .1}
+        line_color: [0.8745098039215686, 0.8901960784313725, 0.9058823529411765, 1.0]
+        on_press: root.manager.open_ipdialog()

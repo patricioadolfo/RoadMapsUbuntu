@@ -1,9 +1,9 @@
 from rest_framework import routers
 from django.urls import path, include
-from .views import RouteSerializerViewSet, OriginSerializerViewSet, DestinationSerializerViewSet, InstanceSerializerViewSet, UserSerializerViewSet, PerfilSerializerViewSet
+from .views import RouteSerializerViewSet, OriginSerializerViewSet, DestinationSerializerViewSet, InstanceSerializerViewSet, UserSerializerViewSet, PerfilSerializerViewSet, PrintJobSerializerViewSet
 router = routers.DefaultRouter()
 router.register(r'api-route', RouteSerializerViewSet)
-
+router.register(r'api-printjob', PrintJobSerializerViewSet)
 router.register(r'api-instance', InstanceSerializerViewSet)
 router.register(r'api-origin', OriginSerializerViewSet)
 router.register(r'api-destination', DestinationSerializerViewSet)

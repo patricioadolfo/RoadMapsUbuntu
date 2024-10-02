@@ -15,7 +15,6 @@ class RouteSerializer(serializers.ModelSerializer):
    
         fields = "__all__"
 
-
 class instanceSerializer(serializers.ModelSerializer):
     
     route_id = serializers.ReadOnlyField(source='route.id')
@@ -25,9 +24,7 @@ class instanceSerializer(serializers.ModelSerializer):
         read_only_fields = ('route_id',)
    
         fields = "__all__"
-
-
-        
+       
 class OriginSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.NodeOrigin
@@ -48,3 +45,19 @@ class PerfilSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Perfil
         fields = "__all__"
+
+class PrintJobSerializer(serializers.ModelSerializer):
+
+    job_id = serializers.ReadOnlyField(source='job.id')
+    
+    printer_name = serializers.ReadOnlyField(source='printer.name')
+
+    state_id= serializers.ReadOnlyField(source= 'state.state')
+    
+    class Meta:
+        
+        model = models.PrintJob
+
+        read_only_fields = ('job_id', 'printer_name', 'state_id')
+
+        fields= "__all__"

@@ -67,7 +67,7 @@ class QrScreen(MDScreen):
             
             else:
                 
-                self.manage.dialog.text_card(dict(qr= self.text_qr, msj= 'Qr Invalido'), self.manager)
+                self.manager.dialog.text_card(dict(qr= self.text_qr, msj= 'Qr Invalido'), self.manager)
                 
                 self.manager.dialog.qr_open()
 
@@ -110,4 +110,4 @@ class QrScreen(MDScreen):
                             
             if self.text_qr != '':
 
-                self.manager.go_screen(self.manager.current, [self.qr_result()], 'Error de conexión')
+                self.manager.go_screen(4, [self.qr_result()], 'Error de conexión')

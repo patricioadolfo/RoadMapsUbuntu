@@ -35,5 +35,5 @@ class StatesAdmin(admin.ModelAdmin):
 @admin.register(Perfil)
 class PerfilAdmin(admin.ModelAdmin):
 
-    list_display= ('id', 'user', 'nodo')
+    list_display= ('id', 'user', 'nodo', 'dealer')
     

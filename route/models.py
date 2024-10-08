@@ -143,7 +143,9 @@ class Perfil(models.Model):
     
     user = models.ForeignKey(User, on_delete=models.CASCADE, null= True,)
 
-    nodo =  models.ForeignKey(NodeOrigin, on_delete=models.CASCADE, null= True)
+    nodo =  models.ForeignKey(NodeOrigin, on_delete=models.CASCADE, null= True, blank= True)
+
+    dealer= models.BooleanField(default= False)
 
     def __str__(self):
         """String for representing the Model object."""

@@ -56,8 +56,8 @@
         style: "outlined"
         on_press:
             root.parent.progress(root)
-        on_release:        
-            root.parent.go_screen('homescreen',[root.login_a()],'Login incorrecto')
+        on_release:         
+            root.parent.go_screen(1, [root.login_a()],'Login incorrecto')
         
         MDButtonText:
             id: text

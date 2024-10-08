@@ -58,7 +58,11 @@ class RmScreenManager(MDScreenManager):
 
                 if not False in self.len_lists:
 
-                    self.change_screen(screen)
+                    _screen = self.change_perfil(screen)
+
+                    print(_screen)
+
+                    self.change_screen(_screen)
 
                     self.stop_progres(self.get_screen(self.pre_screen))
 
@@ -79,6 +83,40 @@ class RmScreenManager(MDScreenManager):
                 
             sleep(0.1)
 
+    def change_perfil(self, screen):
+
+        if screen == 1:
+
+            if self.user.perfil == None:
+
+                return 'homescreen_dealer'
+            
+            else:
+
+                return 'homescreen'
+        
+        elif screen == 2:
+
+            if self.user.perfil == None:
+
+                return 'orderscreen_dealer'
+            
+            else:
+
+                return 'ordercreatescreen'
+            
+        elif screen == 3:
+
+            return 'loginscreen'
+        
+        elif screen == 4:
+
+            return 'qrscreen'
+        
+        elif screen == 5:
+
+            return 'orderscreen_dealer_details'
+    
     def go_screen(self, screen, list, msj):
 
         self.list = list

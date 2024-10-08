@@ -31,6 +31,7 @@ class Route:
             return r.json()
         
         else:
+            
             return False
         
     def patch_url(self, id, payload):
@@ -129,7 +130,18 @@ class User(Route):
 
             perfil = self.get_url('?q='+ str({"user": self.id_user['id']}).replace("'",'"').replace(' ',''))
             
-            self.perfil= perfil['results'][0]['nodo']
+            
+            if perfil['results'][0]['dealer'] == True:
+
+                self.perfil= None
+
+                return True
+            
+            else:
+
+                self.perfil= perfil['results'][0]['nodo']
+
+                return False
 
     def logOut(self,):
 
@@ -148,21 +160,40 @@ class User(Route):
     def receive(self, id_route):
         
         self.url= self.url_route
-     
-        payload= {"status": 3}
+
+        if self.perfil == None:
+        
+            payload= {"status": 2}
+
+        else:    
+
+            payload= {"status": 3}
     
         patch= self.patch_url(id_route, payload)
         
         if patch == 200:
 
-            payload={
-                "route_id": id_route,
-                "status": 3,
-                "instance_date":  datetime.today().strftime("%Y-%m-%d"),
-                "instance_time": time.strftime("%H:%M:%S", time.localtime()),
-                "user": self.id_user['id'],
-                "route": id_route
-            }
+            if self.perfil == None:
+
+                payload={
+                    "route_id": id_route,
+                    "status": 2,
+                    "instance_date":  datetime.today().strftime("%Y-%m-%d"),
+                    "instance_time": time.strftime("%H:%M:%S", time.localtime()),
+                    "user": self.id_user['id'],
+                    "route": id_route
+                }                
+            
+            else:
+
+                payload={
+                    "route_id": id_route,
+                    "status": 3,
+                    "instance_date":  datetime.today().strftime("%Y-%m-%d"),
+                    "instance_time": time.strftime("%H:%M:%S", time.localtime()),
+                    "user": self.id_user['id'],
+                    "route": id_route
+                }
             
             self.url= self.url_instance
 
@@ -174,8 +205,6 @@ class User(Route):
             
             return False
         
-
-
     def view_road(self, query):
         
         self.url= self.url_route
@@ -246,4 +275,24 @@ class User(Route):
         except: 
 
             pass
-            
+
+    def pre_load_dealer(self, dt):
+
+        try:
+                
+            self._dict['nodes_origin'] = self.view_nodes(self.url_origin)
+
+            self._dict['nodes_destin']= self.view_nodes(self.url_destin)
+
+            self._dict['prepared'] = self.view_road('?q='+ str({'status': 1}).replace("'",'"').replace(' ',''))
+        
+            self._dict['on_road'] = self.view_road('?q='+ str({'status': 2}).replace("'",'"').replace(' ',''))
+
+            self.dict= self._dict
+      
+        except: 
+
+            pass        
+
+
+ 

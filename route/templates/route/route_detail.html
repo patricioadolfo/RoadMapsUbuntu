@@ -32,21 +32,9 @@
   <li><strong>Pedido preparado</strong> </li>
   <p> El dia {{route.preparation_date}} a las {{route.preparation_time}}, por {{ route.user }}</p>
   {% for instance in route.routeinstance_set.all %}
-    
-    {% if instance.status == 2 %}
-      <li><strong>Pedido en camino</strong></li>
+      <li><strong>Pedido {{instance.status}}</strong></li>
       <p> el dia {{instance.instance_date}} a las {{instance.instance_time}}, por {{ instance.user }}</p>
-    {% endif %}
-      
-    {% if instance.status == 1 %}
-      <li><strong>Pedido en entregado</strong></li>
-      <p> el dia {{instance.instance_date}} a las {{instance.instance_time}}, por {{ instance.user }}</p>
-    {% endif %}  
-    
-    {% if instance.status == 3 %}
-      <li><strong>Pedido en recibido</strong></li>
-      <p> el dia {{instance.instance_date}} a las {{instance.instance_time}}, por {{ instance.user }}</p>
-  {% endif %}
+
 
   {% endfor %}
 </div>

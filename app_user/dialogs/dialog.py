@@ -102,19 +102,41 @@ class QrDialog(MDDialog):
         if 'status' in dict:
         
             if dict['status'] == 2:
-                
-                self.buton_status(False)
-                
-                detail_text= 'Envio n° {id}, preparado el dia {date} a las {time}'.format(
-                    id= str(dict['id']),
-                    date= dict['preparation_date'],
-                    time= dict['preparation_time'],
-                ) 
+
+                if self.manager.user.perfil == None:
+                    
+                    detail_text= 'Envio n° {id} en camino'.format(id= str(dict['id']))
+
+                else:
+
+                    self.buton_status(False)
+                    
+                    detail_text= 'Envio n° {id}, preparado el dia {date} a las {time}'.format(
+                        id= str(dict['id']),
+                        date= dict['preparation_date'],
+                        time= dict['preparation_time'],
+                    ) 
             
             elif dict['status'] == 1:
-                detail_text= 'Envio n° {id} preparado'.format(id= str(dict['id']))
+
+                if self.manager.user.perfil == None: 
+
+                    self.buton_status(False)
+                
+                    detail_text= 'Envio n° {id}, preparado el dia {date} a las {time}'.format(
+                                                                                        id= str(dict['id']),
+                                                                                        date= dict['preparation_date'],
+                                                                                        time= dict['preparation_time'],
+                                                                                           ) 
+
+
+                else:
+                    
+                    detail_text= 'Envio n° {id} preparado'.format(id= str(dict['id']))
+
             
             elif dict['status'] == 3:
+
                 detail_text= 'Envio n° {id} recibido'.format(id= str(dict['id']))
 
             else:
@@ -135,20 +157,44 @@ class QrDialog(MDDialog):
 
     @deco        
     def receive_route(self):
-        
-        receive= self.manager.user.receive(str(self.dict['id']))
-            
-        if receive == True:
-            
-            self.close_card()
 
-            self.buton_status(True)
+        if self.manager.user.perfil != None:
 
-            self.manager.go_snack('Envio '+ str(self.dict['id']) + ' recibido')
-            
+            if self.dict['destination'] == self.manager.user.perfil:
+
+                receive= self.manager.user.receive(str(self.dict['id']))
+
+                if receive == True:
+                
+                    self.close_card()
+
+                    self.buton_status(True)
+
+                    self.manager.go_snack('Envio '+ str(self.dict['id']) + ' recibido')
+                
+                else:
+                
+                    self.manager.len_lists.append(False)
+
+            else:
+
+                self.manager.go_snack('El envío es para '+ self.dict['destination_name'])
+
         else:
-            
-            self.manager.len_lists.append(False)
+
+            receive= self.manager.user.receive(str(self.dict['id']))
+                
+            if receive == True:
+                
+                self.close_card()
+
+                self.buton_status(True)
+
+                self.manager.go_snack('Envio '+ str(self.dict['id']) + ' recibido')
+                
+            else:
+                
+                self.manager.len_lists.append(False)
 
 class DialogIp(MDDialog):
     

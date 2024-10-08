@@ -73,7 +73,7 @@
             on_press:
                 root.manager.progress(root.manager.get_screen(root.manager.current))
             on_release:        
-                root.manager.go_screen(root.manager.current, [root.create_order()], 'Error al crear pedido')
+                root.manager.go_screen(2, [root.create_order()], 'Error al crear pedido')
             MDButtonText:
                 text:'Siguiente'
                 theme_text_color: "Custom"
@@ -185,7 +185,7 @@
             on_press:
                 root.manager.progress(root.manager.get_screen(root.manager.current))
             on_release:
-                root.manager.go_screen('qrscreen', [root.receive_route()], 'Error') 
+                root.manager.go_screen(4, [root.receive_route()], 'Error') 
             
             MDButtonIcon:
                 icon: 'package-variant-closed-plus'

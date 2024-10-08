@@ -1,7 +1,7 @@
-#: import HomeScreen home.home
+#: import HomeScreen,HomeScreenDealer home.home
 #: include home/home.kv
 
-#: import OrderCreate,CheckB orders.orders
+#: import OrderCreate,CheckB,OrderScreenDealer orders.orders
 #: include orders/orders.kv
 
 #: import LoginScreen login.login
@@ -22,11 +22,20 @@
     HomeScreen:
         id: home_screen
 
+    HomeScreenDealer:
+        id: home_screen_dealer
+
     QrScreen:
         id: qr_screen
 
     OrderCreate:
         id: order_create
+
+    OrderScreenDealer:
+        id: order_screen_dealer
+    
+    OrderScreenDealerDetails:
+        id: order_screen_dealer_details
 
 <Progress>
     id: progress

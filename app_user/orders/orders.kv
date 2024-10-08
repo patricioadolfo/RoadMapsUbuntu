@@ -55,3 +55,77 @@
             theme_text_color: "Custom"
             text_color: app.theme_cls.tercearyColor
             
+
+<OrderScreenDealerDetails>
+    name: 'orderscreen_dealer_details'
+    
+    MDBoxLayout:
+        orientation: 'vertical'
+    
+        MDBoxLayout:
+            orientation: 'horizontal'
+            pos_hint: {'center_x': .5, 'center_y': 1}
+            padding:10
+            size_hint_y: .1
+    
+            MDIconButton:
+                icon: 'keyboard-backspace' 
+                pos_hint: {'center_x': .1, 'center_y': .5}
+                on_press:
+                    root.manager.progress(root.manager.get_screen(root.manager.current)) 
+                on_release:
+                    root.manager.go_screen(2, [root.back_branchsecreen([branch_details_p, branch_details_c])], 'Error')
+    
+            MDLabel:
+                id: branch_details_lb
+                text: '' 
+                halign: 'center'
+                font_style: "Title"
+                #color: app.theme_cls.primaryColor
+                bold: True       
+                pos_hint: {'center_x': .5, 'center_y': .5}
+
+        MDTabsSecondary:
+            id: tabs
+            pos_hint: {"center_x": .5, "center_y": .9}
+            size_hint_y: .9
+
+            MDDivider:
+
+            MDTabsItem:
+
+                MDTabsItemText:
+                    text: 'Retirar'
+                    bold: True
+       
+            MDTabsItem:
+                
+                MDTabsItemText:
+                    text: 'Entregar'
+                    bold: True
+    
+            MDTabsCarousel:
+                size_hint_y: None
+                size_hint_y: .8
+                
+                MDScrollView:
+                    do_scroll_x: False
+    
+                    MDList:
+                        id: branch_details_p
+
+                MDScrollView:
+                    do_scroll_x: False
+    
+                    MDList:
+                        id: branch_details_c
+        
+
+<OrderScreenDealer>
+    name: 'orderscreen_dealer'
+    
+    MDScrollView:
+        do_scroll_x: False
+
+        MDList:
+            id: mdlist

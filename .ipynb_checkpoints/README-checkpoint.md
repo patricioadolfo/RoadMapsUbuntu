@@ -290,21 +290,3 @@ Para generar backup <code>python manage.py dbbackup</code>
 Restaurar copia de backup <code>python manage.py dbrestore</code>
 
 python manage.py collectstatic
-
-<h2>7.Mantenimiento de Base de Datos</h2>
-
-Conetar a la base de datos portgresql y ejecutar comando VACUUM
-
-<code>sudo -u postgres psql</code>
-
-```python
-psql (14.13 (Ubuntu 14.13-0ubuntu0.22.04.1))
-Type "help" for help.
-
-postgres=# \connect road
-You are now connected to database "road" as user "postgres".
-road=# VACUUM ANALYZE;
-VACUUM
-road=# 
-
-```

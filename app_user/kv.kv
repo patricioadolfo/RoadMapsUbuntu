@@ -37,8 +37,8 @@ MDBoxLayout:
                 id: btn_log
                 on_press:
                     screen_manager.progress(screen_manager.get_screen(screen_manager.current))
-                on_release:   
-                    screen_manager.go_screen('loginscreen', [screen_manager.ids.qr_screen.close_cam(),screen_manager.login_out(btn_log, [home_btn, qr_btn, order_btn])], 'Error')
+                on_release:  
+                    screen_manager.go_screen(3, [screen_manager.ids.qr_screen.close_cam(),screen_manager.login_out(btn_log, [home_btn, qr_btn, order_btn])], 'Error')
         
         MDTopAppBarTitle:
             id: title_text
@@ -64,8 +64,8 @@ MDBoxLayout:
             disabled: True
             on_press:
                 screen_manager.progress(screen_manager.get_screen(screen_manager.current))
-            on_release:             
-                screen_manager.go_screen('homescreen', [screen_manager.ids.qr_screen.close_cam()], 'Error')
+            on_release:   
+                screen_manager.go_screen(1, [screen_manager.ids.qr_screen.close_cam(), screen_manager.ids.home_screen_dealer.get_orders()], 'Error') if screen_manager.user.perfil == None else screen_manager.go_screen(1, [screen_manager.ids.qr_screen.close_cam()], 'Error')
 
         BaseMDNavigationItem
             id: qr_btn
@@ -86,7 +86,7 @@ MDBoxLayout:
             on_press:
                 screen_manager.progress(screen_manager.get_screen(screen_manager.current))
             on_release:    
-                screen_manager.go_screen('ordercreatescreen', [screen_manager.ids.qr_screen.close_cam(), screen_manager.ids.order_create.branch_nodes()], 'Error')            
+                screen_manager.go_screen(2, [screen_manager.ids.qr_screen.close_cam(), screen_manager.ids.order_screen_dealer.branch_nodes()], 'Error')  if screen_manager.user.perfil== None else screen_manager.go_screen(2, [screen_manager.ids.qr_screen.close_cam(), screen_manager.ids.order_create.branch_nodes()], 'Error')            
 
                 
              

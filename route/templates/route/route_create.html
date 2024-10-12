@@ -1,3 +1,4 @@
+
 {% extends "base_generic.html" %}
 
 {% block content %}
@@ -5,16 +6,45 @@
 <h2 class="pb-2 border-bottom">Nuevo Envio</h2>
 
 
-<form  class="px-4 py-3" action="" method="post">
+<form  class="px-4 py-3" action="#" method="post">
 
 {% csrf_token %}
 
 <div class="form-control">
-    <label for="id_origin">Desde</label>
-    <div>{{form.origin}}</div>
+    
+    <label for="id_origin">Desde</label>   
+    <div>
+    <select name="origin" class="form-select" required id="id_origin">
+        {% if origin_perfil %}
+            
+            {% for origin in origin_perfil %}
 
+            <option value='{{ origin.nodo.id }}'>{{ origin.nodo }}</option>
+        
+            {% endfor %}
+        
+            {% endif %}
+      </select>
+    </div>
+    
     <label for="id_destination">Para</label>
     <div>{{form.destination}}</div>
+
+    <script>
+        let ee = document.getElementById('id_destination');
+        ee.addEventListener("change", function(e) {
+        
+            if (ee.value.toUpperCase() === '{{ another_destin.id }}') {
+            document.getElementById('id_another_destin').disabled = false;
+        } else {
+            document.getElementById('id_another_destin').disabled = true;
+        }
+        });
+      
+      </script>
+
+    <label for="id_another_destin">Destino</label>
+    <div>{{form.another_destin}} </div>
 
     <label for="id_description">Descripción</label>
     <div>{{form.description}}</div>

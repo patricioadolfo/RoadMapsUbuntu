@@ -8,7 +8,7 @@ class RouteSerializerViewSet(viewsets.ModelViewSet, QueryDict):
 
     state= None
 
-    queryset = routemodels.Route.objects.all().order_by('-preparation_date')
+    queryset = routemodels.Route.objects.all().order_by('-preparation_date')[:50]
     serializer_class = RouteSerializer
     permission_classes = [permissions.IsAuthenticated]
     

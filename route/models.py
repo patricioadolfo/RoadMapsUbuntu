@@ -87,6 +87,8 @@ class Route(models.Model):
    
     destination = models.ForeignKey(NodeOrigin, related_name= 'destination', on_delete=models.SET_NULL, null= True)
     
+    another_destin = models.ForeignKey(NodeDestination, on_delete= models.SET_NULL, null= True, blank= True)
+    
     description = models.TextField(max_length=1000, help_text="Ingrese una breve descripción del envío.", null= False)
     
     preparation_date = models.DateField("Fecha de Creacion", null= True, blank=True, default= datetime.today().strftime("%Y-%m-%d"))

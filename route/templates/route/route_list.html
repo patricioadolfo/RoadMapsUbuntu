@@ -6,7 +6,8 @@
   
   <div>
 
-      <h2 class="pb-2 border-bottom">Listado de rutas</h2>
+      <h2 class="pb-2 border-bottom">Listado de envíos</h2>
+
       {% if route_list %}
 
       <div class="bd-example-snippet bd-code-snippet">
@@ -14,7 +15,7 @@
           
             <table class="table table-hover">
               <thead>
-              <tr>
+              <tr class="table-dark">
                 <th scope="col">Id</th>
                 <th scope="col">Fecha</th>
                 <th scope="col">Usuario</th>
@@ -28,8 +29,10 @@
                     <tr class="table-danger">
                   {% elif route.status.id == 2%} 
                     <tr class="table-warning">
-                  {% else %} 
+                  {% elif route.status.id == 3%}
                     <tr class="table-success">
+                  {% elif route.status.id == 7%}
+                    <tr class="table-light">
                   {% endif %}
                       <th scope="row">
                         <a class="nav-link d-flex align-items-center gap-2" href="{{ route.id }}">{{ route.id }}</a>
@@ -43,9 +46,15 @@
                       <td>
                         <a class="nav-link d-flex align-items-center gap-2" href="{{ route.id }}">{{route.origin}}</a>
                       </td>
+                      {% if route.another_destin != None %}
+                      <td>
+                        <a class="nav-link d-flex align-items-center gap-2" href="{{ route.id }}">{{route.another_destin}}</a>
+                      </td>
+                      {% else %}
                       <td>
                         <a class="nav-link d-flex align-items-center gap-2" href="{{ route.id }}">{{route.destination}}</a>
                       </td>
+                      {%endif%}
                   </tr>
                 
                 {% endfor %}
@@ -63,10 +72,6 @@
         <span class="badge bg-warning-subtle border border-warning-subtle text-warning-emphasis rounded-pill">En camino</span>
         <span class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill">Recibido</span>
         <ul></ul>
-        <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
         <ul></ul>
         <span>
           {% block pagination %}
@@ -119,9 +124,9 @@
 </div>
 
 <ul></ul>
+  <div class= "d-grid gap-2">
+    <a class="btn btn-primary" href="{% url 'route-create' %}" role="button">Crear envío &raquo;</a>
+  </div>
 
-<div class= "d-grid gap-2">
-  <a class="btn btn-primary" href="{% url 'route-create' %}" role="button">Nueva Ruta &raquo;</a>
-</div>
 {% endblock %}
 

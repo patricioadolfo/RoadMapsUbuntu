@@ -6,7 +6,7 @@
   
     <div>
 
-      <h2 class="pb-2 border-bottom">Origenes disponibles para realizar sus envios</h2>
+      <h2 class="pb-2 border-bottom">Nodos disponibles</h2>
 
       {% if nodeorigin_list %}
   
@@ -15,7 +15,7 @@
             
               <table class="table table-hover">
                 <thead>
-                <tr>
+                <tr class="table-dark">
                   <th scope="col">Origen</th>
                   <th scope="col">Direccion</th>
                   <th scope="col">Telefono</th>
@@ -42,10 +42,7 @@
 
 
       <ul></ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+
       
       <ul></ul>
       
@@ -99,10 +96,18 @@
 </div>
 
 <ul></ul>
+{% if user.is_superuser %}
+<div class= "d-grid gap-2">
+  <a class="btn btn-primary" href="{% url 'origin-create' %}"  role="button">Crear Nodo &raquo;</a>
+</div>
+
+{% else %}
 
 <div class= "d-grid gap-2">
-  <a class="btn btn-primary" href="{% url 'origin-create' %}"  role="button">Nuevo Origen &raquo;</a>
+  <a class="btn btn-primary disabled" aria-disabled="true" role="button">Crear Nodo &raquo;</a>
 </div>
+
+{% endif %}
 
 
 {% endblock %}

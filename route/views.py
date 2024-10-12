@@ -1,13 +1,9 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
-from .models import Route, RouteInstance, NodeDestination, NodeOrigin, Perfil
+from .models import Route, RouteInstance, NodeDestination, NodeOrigin, Perfil, States
 from .forms import RouteForm, OriginForm, DestinationForm
 from django.views import generic
-from django.views.generic.edit import DeleteView
-from django.urls import reverse_lazy
-from datetime import datetime
-import time    
-from django.contrib.auth.models import User   
+
 
 def index(request):
     
@@ -19,35 +15,43 @@ def index(request):
 
     Returns:
         _type_:  Renderiza la plantilla HTML index.html con los datos en la variable contexto
-    """
-   
-    try:     
+    """    
+    try:  
 
-        to_send_p = Route.objects.filter( user = request.user ).filter(status= "p" )
-         
-        to_send_c = Route.objects.filter( user = request.user ).filter(status= "c" )
+        dict_origin = []
+
+        dict_destin= []  
         
-        user = User.objects.get(username= request.user )
+        perfil= Perfil.objects.filter(user= request.user )
         
-        perfil= Perfil.objects.get(user= user)
+        for node in perfil:
+    
+            origin = Route.objects.filter( origin = node.nodo ).filter(status= 1 )
+
+            dict_origin.append(origin)
         
-        to_receive_p=Route.objects.filter( destination= perfil.nodo ).filter( status= "p" )
-        
-        to_receive_c=Route.objects.filter( destination= perfil.nodo ).filter( status= "c" ) 
-        
-        return render( request,'index.html',context={'to_send_p':to_send_p,
-                                                    'to_send_c':to_send_c, 
-                                                    'to_receive_p':to_receive_p,
-                                                    'to_receive_c':to_receive_c,                                        
-          },)    
+            origin = Route.objects.filter( origin = node.nodo ).filter(status= 2 )
+
+            dict_origin.append(origin)
+            
+            destin = Route.objects.filter( destination= node.nodo ).filter( status= 1 )
+
+            dict_destin.append(destin)
+            
+            destin = Route.objects.filter( destination= node.nodo ).filter( status= 2 ) 
+
+            dict_destin.append(destin)
+
+        return render( request,'index.html', context={'to_send': dict_origin, 'to_recv': dict_destin},)    
+    
     except:
 
         return render( request,'index.html',)
 
 def update_status(request, pk):
     """
-    Funcion para actualizar el estado de una ruta y agrega una instancia de su estado
-    detallando fecha, hora y usuario de la modificacion
+    Funcion para actualiza el estado a recibido o ignorado de una ruta, y agrega una 
+    instancia de su estado detallando fecha, hora y usuario de la modificacion
 
     Args:
         request (_type_): _description_
@@ -59,47 +63,71 @@ def update_status(request, pk):
  
     route= Route.objects.get(id=pk)
 
-    if route.status == "p":
-        route.status = "c"
-    
-    elif route.status == "c":
-        route.status = "r"
-    
-    else:
-        pass
-    
-    
-    instance= RouteInstance()
-    instance.route= route
-    instance.status= route.status
-    instance.instance_date=  datetime.today().strftime("%Y-%m-%d")
-    instance.instance_time= time.strftime("%H:%M:%S", time.localtime())
-    instance.user= request.user
-    instance.save()
-    route.save()
-    
-    
-    return redirect('routes')
+    if route.status.id ==  2:
 
+        recv= States.objects.get(state = 3)
+        
+        route.status = recv
+
+        route.save()
+
+        instance= RouteInstance()
+        
+        instance.route= route
+        
+        instance.status = recv
+        
+        instance.user= request.user
+        
+        instance.save() 
+
+    if route.status.id ==  1:
+
+        recv= States.objects.get(state = 7)
+        
+        route.status = recv
+
+        route.save()
+
+        instance= RouteInstance()
+        
+        instance.route= route
+        
+        instance.status = recv
+        
+        instance.user= request.user
+        
+        instance.save()    
+           
+    return redirect('routes')
+    
 def route_create(request,):
     
-    if request.method == "POST":
+    if request.method == "POST":       
         
-        form = RouteForm(request.POST)
-        
+        form = RouteForm(request.POST) 
+
+        print(form)       
+
         if form.is_valid():
             
             post = form.save(commit=False)
+
             post.user= request.user
+
             post.save()
-       
-        
+            
         return redirect('index')    
     
     else:
+        
+        origin_perfil= Perfil.objects.filter( user= request.user)
+
+        another_destin= NodeOrigin.objects.get( name= "Destino")
+        
         form= RouteForm()
-    
-        return render(request, 'route/route_create.html', {'form': form})
+
+        return render( request,'route/route_create.html', context={'another_destin': another_destin, 'origin_perfil': origin_perfil, 'form': form},) 
 
 def origin_create(request,):
     
@@ -115,6 +143,7 @@ def origin_create(request,):
         return redirect('nodes-origin')    
     
     else:
+        
         form= OriginForm()
     
         return render(request, 'route/nodeorigin_form.html', {'form': form})
@@ -137,15 +166,17 @@ def destination_create(request,):
     
         return render(request, 'route/nodedestination_form.html', {'form': form})   
 
+
 class RoutesListView(generic.ListView):
+
+    queryset = Route.objects.all().order_by('-id')[:50]
     
-    model = Route
     paginate_by = 10
     
 class RouteDetailView(generic.DetailView):
     
     model = Route
-    
+
 class RouteInstanceListView(generic.ListView):
 
     model = RouteInstance
@@ -167,9 +198,7 @@ class NodeOriginListView(generic.ListView):
     ordering = ["id"]
     paginate_by = 10
     
-class RouteDelete(DeleteView):
-    model = Route
-    success_url = reverse_lazy('routes')
+
     
 
 

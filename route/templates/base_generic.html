@@ -4,14 +4,15 @@
 
   <head>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>    
+
     <script>
       function imprim1(imp1){
       var printContents = document.getElementById('imp1').innerHTML;
               w = window.open();
               w.document.write(printContents);
-              w.document.close(); // necessary for IE >= 10
-              w.focus(); // necessary for IE >= 10
+              w.document.close(); 
+              w.focus();
           w.print();
           w.close();
               return true;}
@@ -45,23 +46,23 @@
             </li>
             {% if user.is_authenticated %}
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'routes' %}">Rutas</a>
+              <a class="nav-link" href="{% url 'routes' %}">Envíos</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'nodes-origin' %}">Origen</a>
+              <a class="nav-link" href="{% url 'nodes-origin' %}">Nodos</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'nodes-destin' %}">Destino</a>
+              <a class="nav-link" href="{% url 'nodes-destin' %}">Destinos</a>
             </li>
             {% else %}
             <li class= "nav-item">
-              <a class="nav-link disabled" aria-disabled="true">Rutas</a>
+              <a class="nav-link disabled" aria-disabled="true">Envíos</a>
             </li>
             <li class= "nav-item">
-              <a class="nav-link disabled" aria-disabled="true">Origen</a>
+              <a class="nav-link disabled" aria-disabled="true">Nodos</a>
             </li>
             <li class= "nav-item">
-              <a class="nav-link disabled" aria-disabled="true">Destino</a>
+              <a class="nav-link disabled" aria-disabled="true">Destinos</a>
             </li>
             {% endif %}
           </ul>
@@ -97,49 +98,27 @@
             <div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="width: 200px;">
             <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
               <svg class="bi pe-none me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
-              <span class="fs-4">Accesos Rápidos</span>
+
+              <img src="{% static 'images/logo.jpg' %}" width="122" height="122" >
             </a>
             <hr>
+          
             <ul class="nav nav-pills flex-column mb-auto">
               <li>
-                <a href="{% url 'route-create' %}" class="nav-link link-body-emphasis">
+                <a href= "https://delaguila.turecibo.com/e/login" class="nav-link link-body-emphasis">
                   <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"/></svg>
-                  Nuevo Envio
+                  Tu Recibo
                 </a>
               </li>
               <li>
-                <a href="{% url 'route-create' %}" class="nav-link link-body-emphasis">
+                <a href="https://www.farmaciasdelaguila.com.ar/" class="nav-link link-body-emphasis">
                   <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"/></svg>
-                  Recibir Envio
-                </a>
-              </li>
-              <li>
-                <a href="{% url 'origin-create' %}" class="nav-link link-body-emphasis">
-                  <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
-                  Nuevo Origen
-                </a>
-              </li>
-              <li>
-                <a href="{% url 'destin-create' %}" class="nav-link link-body-emphasis">
-                  <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
-                  Nuevo Destino
+                  Ecommerce
                 </a>
               </li>
             </ul>
             <hr>
-            <div class="dropdown">
-              <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="{% static 'images/logo.jpg' %}" alt="" width="42" height="42" class="rounded-circle me-2">
-                <strong>links</strong>
-              </a>
-              <ul class="dropdown-menu text-small shadow">
-                <li><a class="dropdown-item" href="#">New project...</a></li>
-                <li><a class="dropdown-item" href="#">Settings</a></li>
-                <li><a class="dropdown-item" href="#">Profile</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Sign out</a></li>
-              </ul>
-            </div>
+
             </div>
           </div>
         </div>

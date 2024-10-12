@@ -6,7 +6,7 @@
   
     <div>
 
-      <h2 class="pb-2 border-bottom">Destinos disponibles para realizar sus envios</h2>
+      <h2 class="pb-2 border-bottom">Destinos disponibles para realizar sus envíos</h2>
 
 
       {% if nodedestination_list %}
@@ -16,7 +16,7 @@
             
               <table class="table table-hover">
                 <thead>
-                <tr>
+                <tr class="table-dark">
                   <th scope="col">Origen</th>
                   <th scope="col">Direccion</th>
                   <th scope="col">Telefono</th>
@@ -39,10 +39,6 @@
                 
             </div>
           </div>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
       
       <ul></ul>
       
@@ -98,7 +94,7 @@
 <ul></ul>
 
 <div class= "d-grid gap-2">
-  <a class="btn btn-primary" href="create/" role="button">Nuevo destino &raquo;</a>
+  <a class="btn btn-primary" href="{% url 'destin-create' %}"  role="button">Crear destino &raquo;</a>
 </div>
 
 

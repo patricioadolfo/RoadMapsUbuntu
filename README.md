@@ -308,3 +308,17 @@ VACUUM
 road=# 
 
 ```
+
+<h2>8. Estados Creados en Base de Datos</h2>
+
+        ID      State   Descriptions
+	8	8	ENTREGADO
+	7	7	IGNORADO
+	6	6	EN LINEA
+	5	5	FUERA DE LINEA
+	4	4	CREADO
+	3	3	RECIBIDO
+	2	2	EN CAMINO
+	1	1	PREPARADO
+
+Crear un nodo de origen con el nombre Destino para vincular con los destinos creados en la tabla Destinos

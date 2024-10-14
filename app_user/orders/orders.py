@@ -125,13 +125,21 @@ class OrderScreenDealerDetails(Order):
         self.ids.branch_details_lb.text= instance['name']
         
         for item in self.prepared['results']:
+
+            if item['another_destin'] != None:
+
+                destin = 'another_destin_name'
+            
+            else:
+
+                destin = 'destination_name'
             
             self.ids.branch_details_p.add_widget(MDListItem(
                                                     MDListItemHeadlineText(
                                                         text= '###'+ str(item['id']),
                                                     ),
                                                     MDListItemSupportingText(
-                                                        text= '     Para: '+item['destination_name'],
+                                                        text= '     Para: '+item[destin],
                                                     ),
                                                     MDListItemTertiaryText(
                                                         text= '         Preparado: '+item['preparation_date'],
@@ -144,10 +152,18 @@ class OrderScreenDealerDetails(Order):
 
         
         for item in self.on_road['results']:
+
+            if item['another_destin'] != None:
+                
+                text_destin= ' Para ' + item['another_destin_name']
+
+            else:
+
+                text_destin= ''
             
             self.ids.branch_details_c.add_widget(MDListItem(
                                                         MDListItemHeadlineText(
-                                                            text= '###'+ str(item['id']),
+                                                            text= '###'+ str(item['id']) + text_destin,
                                                             ),
                                                         MDListItemSupportingText(
                                                             text= '     De: '+item['origin_name'],

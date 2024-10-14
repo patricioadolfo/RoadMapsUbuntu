@@ -41,9 +41,15 @@
                     <td>
                       <a class="nav-link d-flex align-items-center gap-2" href="route/{{ s.id }}">{{s.origin}}</a>
                     </td>
+                    {% if s.another_destin != None %}
                     <td>
-                      <a class="nav-link d-flex align-items-center gap-2" href="route/{{ s.id }}">{{s.destination}}</a>
+                      <a class="nav-link d-flex align-items-center gap-2" href="{{ s.id }}">{{s.another_destin}}</a>
                     </td>
+                    {% else %}
+                    <td>
+                      <a class="nav-link d-flex align-items-center gap-2" href="{{ s.id }}">{{s.destination}}</a>
+                    </td>
+                    {%endif%}
                     <td>
                       <a class="nav-link d-flex align-items-center gap-2" href="route/{{ s.id }}">{{s.status}}</a>
                     </td>

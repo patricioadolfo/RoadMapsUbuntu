@@ -1,6 +1,4 @@
 import requests
-from datetime import datetime
-import time
 from threading import Thread
 from kivy.clock import Clock
 
@@ -101,8 +99,6 @@ class User(Route):
         self.url_id_user= url + '/api/api-user/'
 
         self.url_origin= url + '/api/api-origin/'
-        
-        self.url_destin= url + '/api/api-destination/'    
    
         self.url_login= url + '/api-auth/login/'
         
@@ -129,8 +125,7 @@ class User(Route):
             self.url= self.url_perfil
 
             perfil = self.get_url('?q='+ str({"user": self.id_user['id']}).replace("'",'"').replace(' ',''))
-            
-            
+
             if perfil['results'][0]['dealer'] == True:
 
                 self.perfil= None
@@ -138,8 +133,10 @@ class User(Route):
                 return True
             
             else:
-
+                
                 self.perfil= perfil['results'][0]['nodo']
+                
+                print(self.perfil)
 
                 return False
 
@@ -157,43 +154,23 @@ class User(Route):
        
             self.client.post(self.url_logout, data=dict(csrfmiddlewaretoken=csrftoken, next=''), headers=dict(Referer= self.url_logout))
             
-    def receive(self, id_route):
+    def receive(self, id_route, state):
         
         self.url= self.url_route
-
-        if self.perfil == None:
         
-            payload= {"status": 2}
-
-        else:    
-
-            payload= {"status": 3}
+        payload= {"status": state}
     
         patch= self.patch_url(id_route, payload)
         
         if patch == 200:
 
-            if self.perfil == None:
+            payload={
+                "route_id": id_route,
+                "status": state,
+                "user": self.id_user['id'],
+                "route": id_route
+            }
 
-                payload={
-                    "route_id": id_route,
-                    "status": 2,
-                    "instance_date":  datetime.today().strftime("%Y-%m-%d"),
-                    "instance_time": time.strftime("%H:%M:%S", time.localtime()),
-                    "user": self.id_user['id'],
-                    "route": id_route
-                }                
-            
-            else:
-
-                payload={
-                    "route_id": id_route,
-                    "status": 3,
-                    "instance_date":  datetime.today().strftime("%Y-%m-%d"),
-                    "instance_time": time.strftime("%H:%M:%S", time.localtime()),
-                    "user": self.id_user['id'],
-                    "route": id_route
-                }
             
             self.url= self.url_instance
 
@@ -219,8 +196,6 @@ class User(Route):
         
         payload= { 
                     "description": detail,
-                    "preparation_date": datetime.today().strftime("%Y-%m-%d"),
-                    "preparation_time":  time.strftime("%H:%M:%S", time.localtime()),
                     "status": 1,
                     "user": self.id_user['id'],
                     "origin": self.perfil,
@@ -260,8 +235,6 @@ class User(Route):
                 
             self._dict['nodes_origin'] = self.view_nodes(self.url_origin)
 
-            self._dict['nodes_destin']= self.view_nodes(self.url_destin)
-
             self._dict['origin_prep'] = self.view_road('?q='+ str({'origin': self.perfil, 'status': 1}).replace("'",'"').replace(' ',''))['results']
         
             self._dict['origin_on_road'] = self.view_road('?q='+ str({'origin': self.perfil, 'status': 2}).replace("'",'"').replace(' ',''))['results']
@@ -281,8 +254,6 @@ class User(Route):
         try:
                 
             self._dict['nodes_origin'] = self.view_nodes(self.url_origin)
-
-            self._dict['nodes_destin']= self.view_nodes(self.url_destin)
 
             self._dict['prepared'] = self.view_road('?q='+ str({'status': 1}).replace("'",'"').replace(' ',''))
         

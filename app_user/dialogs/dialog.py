@@ -89,8 +89,14 @@ class QrDialog(MDDialog):
         if 'origin_name' in dict:
             
             self.ids.origin_dialog.text= 'De '+ dict['origin_name']
+
+            if dict['another_destin'] != None:
+
+                self.ids.destin_dialog.text=  'Para '+ dict['another_destin_name']
             
-            self.ids.destin_dialog.text=  'Para '+ dict['destination_name']
+            else:
+                
+                self.ids.destin_dialog.text=  'Para '+ dict['destination_name']
                                  
     @mainthread
     def close_card(self,):
@@ -104,6 +110,10 @@ class QrDialog(MDDialog):
             if dict['status'] == 2:
 
                 if self.manager.user.perfil == None:
+
+                    if dict['another_destin'] != None:
+
+                        self.buton_status(False)
                     
                     detail_text= 'Envio n° {id} en camino'.format(id= str(dict['id']))
 
@@ -138,6 +148,10 @@ class QrDialog(MDDialog):
             elif dict['status'] == 3:
 
                 detail_text= 'Envio n° {id} recibido'.format(id= str(dict['id']))
+            
+            elif dict['status'] == 8:
+
+                detail_text= 'Envio n° {id} entregado'.format(id= str(dict['id']))
 
             else:
                 detail_text= 'Ocurrio algún error'
@@ -162,7 +176,7 @@ class QrDialog(MDDialog):
 
             if self.dict['destination'] == self.manager.user.perfil:
 
-                receive= self.manager.user.receive(str(self.dict['id']))
+                receive= self.manager.user.receive(str(self.dict['id']), 3)
 
                 if receive == True:
                 
@@ -182,7 +196,19 @@ class QrDialog(MDDialog):
 
         else:
 
-            receive= self.manager.user.receive(str(self.dict['id']))
+            if self.dict['another_destin'] != None:
+
+                if self.dict['status'] == 2:
+           
+                    receive= self.manager.user.receive(str(self.dict['id']), 8)
+                
+                else:
+
+                    receive= self.manager.user.receive(str(self.dict['id']), 2)
+            
+            else:
+
+                receive= self.manager.user.receive(str(self.dict['id']), 2)
                 
             if receive == True:
                 

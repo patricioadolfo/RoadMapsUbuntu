@@ -7,11 +7,11 @@ class RouteSerializer(serializers.ModelSerializer):
     
     origin_name = serializers.ReadOnlyField(source='origin.name')
     destination_name = serializers.ReadOnlyField(source='destination.name')
-    
-    
+    another_destin_name= serializers.ReadOnlyField(source= 'another_destin.name')
+        
     class Meta:
         model = models.Route
-        read_only_fields = ('origin_name', 'destination_name')
+        read_only_fields = ('origin_name', 'destination_name', 'another_destin_name')
    
         fields = "__all__"
 

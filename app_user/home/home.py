@@ -18,21 +18,29 @@ class Home(MDScreen):
         self.ids.text_home.text= 'Hola '+ self.manager.user.id_user['username']
 
     @mainthread
-    def order_item(self, order, list, o_or_d):            
-           
-        item= MDListItem(
-                        MDListItemLeadingIcon(
-                            icon='package-variant-plus',
-                                ),
-                        MDListItemTertiaryText(
-                            text= str(order['id'])+ o_or_d[0] + order[o_or_d[1]] + ', preparado el '+ order['preparation_date']
-                        ),
-                        ripple_effect= False,
-                        on_press= self.open_dialog,
-                        ids= order,
+    def order_item(self, order, list, o_or_d):    
 
-                    )
-        list.add_widget(item)
+        try:       
+            
+            t= str(order['id'])+ o_or_d[0] + order[o_or_d[1]] + ', preparado el '+ order['preparation_date']
+
+            item= MDListItem(
+                            MDListItemLeadingIcon(
+                                icon='package-variant-plus',
+                                    ),
+                            MDListItemTertiaryText(
+                                text= t
+                            ),
+                            ripple_effect= False,
+                            on_press= self.open_dialog,
+                            ids= order,
+
+                        )
+            list.add_widget(item)
+        
+        except:
+            
+            pass
 
 class HomeScreen(Home):
 
@@ -60,26 +68,39 @@ class HomeScreen(Home):
             self.clear_list()
     
             if state == 1:
-                    
+      
                 for order in self.manager.user.dict['origin_prep']:
 
-                    self.order_item(order, self.ids.list_send,[' Para ', 'destination_name'])
-                
+                    if order['another_destin'] != None:
+
+                        self.order_item(order, self.ids.list_send,[' Para ', 'another_destin_name'])
+
+                    else:
+
+                        self.order_item(order, self.ids.list_send,[' Para ', 'destination_name'])
+            
                 for order in self.manager.user.dict['destin_prep']:
 
                     self.order_item(order, self.ids.list_receive, [' De ', 'origin_name'])
-                
+            
                 self.set_text('ESTADO: PREPARADO EN SUCURSAL', 'ENVIAR')
 
-            elif state == 2:
-            
-                for order in self.manager.user.dict['origin_on_road']:
+            elif state == 2:              
 
-                    self.order_item(order, self.ids.list_send, ['Para ', 'destination_name'])
+                for order in self.manager.user.dict['origin_on_road']:
+                    
+                    if order['another_destin'] != None:
+
+                        self.order_item(order, self.ids.list_send, [' Para ', 'another_destin_name'])
+                
+                    else:
+
+                        self.order_item(order, self.ids.list_send, [' Para ', 'destination_name'])
+                
                 
                 for order in self.manager.user.dict['destin_on_road']:
 
-                    self.order_item(order, self.ids.list_receive, ['De ', 'origin_name'])
+                    self.order_item(order, self.ids.list_receive, [' De ', 'origin_name'])
 
                 self.set_text('ESTADO: EN CAMINO', 'ENVIADO')
 
@@ -160,7 +181,13 @@ class HomeScreenDealer(Home):
                 
             for order in self.manager.user.dict['on_road']['results']:
 
-                self.order_item(order, self.ids.list_onroad, [' para ', 'destination_name'])
+                if order['another_destin'] != None:
+
+                    self.order_item(order, self.ids.list_onroad, [' para ', 'another_destin_name'])
+
+                else:
+
+                    self.order_item(order, self.ids.list_onroad, [' para ', 'destination_name'])
                 
             self.set_text()
 

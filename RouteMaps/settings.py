@@ -37,8 +37,6 @@ DEBUG = True
 #ALLOWED_HOSTS = ['10.0.10.83']
 ALLOWED_HOSTS = ['*']# Para Prueba de produccion
 
-DOCS_ROOT = os.path.join(BASE_DIR, 'docs/build/html')
-
 DOCS_ACCESS = 'public'
 # Application definition
 
@@ -55,7 +53,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'qr_code',
     'dbbackup', 
-    'docs',
 ]
 
 
@@ -133,7 +130,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'es'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Buenos_Aires'
 
 USE_I18N = True
 
@@ -174,7 +171,5 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
 }
-
-DOCS_ROOT = os.path.join(BASE_DIR,'docs/_build/html')
 
 DOCS_ACCESS = 'public'

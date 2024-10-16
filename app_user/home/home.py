@@ -81,7 +81,13 @@ class HomeScreen(Home):
             
                 for order in self.manager.user.dict['destin_prep']:
 
-                    self.order_item(order, self.ids.list_receive, [' De ', 'origin_name'])
+                    if order['another_origin'] != None:
+
+                        self.order_item(order, self.ids.list_receive, [' De ', 'another_origin_name'])
+                    
+                    else:
+
+                        self.order_item(order, self.ids.list_receive, [' De ', 'origin_name'])
             
                 self.set_text('ESTADO: PREPARADO EN SUCURSAL', 'ENVIAR')
 
@@ -100,7 +106,13 @@ class HomeScreen(Home):
                 
                 for order in self.manager.user.dict['destin_on_road']:
 
-                    self.order_item(order, self.ids.list_receive, [' De ', 'origin_name'])
+                    if order['another_origin'] != None:
+
+                        self.order_item(order, self.ids.list_receive, [' De ', 'another_origin_name'])
+
+                    else:
+
+                        self.order_item(order, self.ids.list_receive, [' De ', 'origin_name'])
 
                 self.set_text('ESTADO: EN CAMINO', 'ENVIADO')
 
@@ -177,7 +189,13 @@ class HomeScreenDealer(Home):
             
             for order in self.manager.user.dict['prepared']['results']:
 
-                self.order_item(order, self.ids.list_prepared, [' de ', 'origin_name'])
+                if order['another_origin'] != None:
+
+                    self.order_item(order, self.ids.list_prepared, [' de ', 'another_origin_name'])
+
+                else:
+
+                    self.order_item(order, self.ids.list_prepared, [' de ', 'origin_name'])
                 
             for order in self.manager.user.dict['on_road']['results']:
 

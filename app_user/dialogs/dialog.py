@@ -16,9 +16,21 @@ class HomeDialog(MDDialog):
         
         self.ids.lb_box_card.text= dict['description']
 
-        self.ids.origin_dialog.text= 'De '+ dict['origin_name']
+        if dict['another_origin'] != None:
+
+            self.ids.origin_dialog.text= 'De '+ dict['another_origin_name']
+        
+        else:
             
-        self.ids.destin_dialog.text=  'Para '+ dict['destination_name']
+            self.ids.origin_dialog.text= 'De '+ dict['origin_name']
+
+        if dict['another_destin'] != None:
+
+            self.ids.destin_dialog.text=  'Para '+ dict['another_destin_name']
+
+        else:            
+            
+            self.ids.destin_dialog.text=  'Para '+ dict['destination_name']
 
         self.dialog_open()
                                  
@@ -87,8 +99,14 @@ class QrDialog(MDDialog):
         self.ids.lb_box_card.text= detail_text
         
         if 'origin_name' in dict:
+
+            if dict['another_origin'] != None:
             
-            self.ids.origin_dialog.text= 'De '+ dict['origin_name']
+                self.ids.origin_dialog.text= 'De '+ dict['another_origin_name']
+            
+            else:
+
+                self.ids.origin_dialog.text= 'De '+ dict['origin_name']
 
             if dict['another_destin'] != None:
 
@@ -114,6 +132,10 @@ class QrDialog(MDDialog):
                     if dict['another_destin'] != None:
 
                         self.buton_status(False)
+                    
+                    else:
+
+                        self.buton_status(True)
                     
                     detail_text= 'Envio n° {id} en camino'.format(id= str(dict['id']))
 

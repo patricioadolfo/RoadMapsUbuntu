@@ -1,11 +1,11 @@
 from django.contrib import admin
 
-from .models import Route, RouteInstance, NodeDestination, NodeOrigin, Perfil, States, PrinterNode, PrintJob
+from .models import Route, RouteInstance, NodeDestination, NodeOrigin, Perfil, States, PrinterNode, PrintJob, Urls
 
 
 admin.site.register(NodeDestination)
-admin.site.register(NodeOrigin)
 
+admin.site.register(NodeOrigin)
 
 @admin.register(PrinterNode)
 class PrinterNodeAdmin(admin.ModelAdmin):
@@ -23,7 +23,7 @@ class RouteInstanceInline(admin.TabularInline):
 @admin.register(Route)
 class RouteAdmin(admin.ModelAdmin):
     
-    list_display = ('id', 'user', 'origin', 'destination', 'preparation_date',)
+    list_display = ('id', 'user', 'origin', 'another_origin' , 'destination', 'another_destin' , 'preparation_date',)
     
     inlines = [RouteInstanceInline]
     
@@ -36,4 +36,9 @@ class StatesAdmin(admin.ModelAdmin):
 class PerfilAdmin(admin.ModelAdmin):
 
     list_display= ('id', 'user', 'nodo', 'dealer')
+
+@admin.register(Urls)
+class UrlsAdmin(admin.ModelAdmin):
+
+    list_display= ('id', 'name', 'url', 'state')
     

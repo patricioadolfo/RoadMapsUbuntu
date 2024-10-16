@@ -1,9 +1,12 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
-from .models import Route, RouteInstance, NodeDestination, NodeOrigin, Perfil, States
+
+from .models import Route, RouteInstance, NodeDestination, NodeOrigin, Perfil, States, Urls
 from .forms import RouteForm, OriginForm, DestinationForm
 from django.views import generic
+from django.contrib.auth.models import User
 
+User.urls = Urls.objects.filter(state= 9)     
 
 def index(request):
     
@@ -23,26 +26,28 @@ def index(request):
         dict_destin= []  
         
         perfil= Perfil.objects.filter(user= request.user )
+
+        another_destin= NodeOrigin.objects.get( name= "Destino")
         
         for node in perfil:
     
-            origin = Route.objects.filter( origin = node.nodo ).filter(status= 1 )
+            origin = Route.objects.exclude( origin = another_destin).filter( origin = node.nodo ).filter(status= 1 )
 
             dict_origin.append(origin)
         
-            origin = Route.objects.filter( origin = node.nodo ).filter(status= 2 )
+            origin = Route.objects.exclude( origin = another_destin).filter( origin = node.nodo ).filter(status= 2 )
 
             dict_origin.append(origin)
             
-            destin = Route.objects.filter( destination= node.nodo ).filter( status= 1 )
+            destin = Route.objects.exclude( destination= another_destin).filter( destination= node.nodo ).filter( status= 1 )
 
             dict_destin.append(destin)
             
-            destin = Route.objects.filter( destination= node.nodo ).filter( status= 2 ) 
+            destin = Route.objects.exclude( destination= another_destin).filter( destination= node.nodo ).filter( status= 2 ) 
 
             dict_destin.append(destin)
 
-        return render( request,'index.html', context={'to_send': dict_origin, 'to_recv': dict_destin},)    
+        return render( request,'index.html', context={'to_send': dict_origin, 'to_recv': dict_destin,},)    
     
     except:
 
@@ -132,10 +137,11 @@ def route_create(request,):
 def origin_create(request,):
     
     if request.method == "POST":
-        
+
         form = OriginForm(request.POST)
         
         if form.is_valid():
+
             post = form.save(commit=False)
             post.save()
         
@@ -165,7 +171,6 @@ def destination_create(request,):
         form= DestinationForm()
     
         return render(request, 'route/nodedestination_form.html', {'form': form})   
-
 
 class RoutesListView(generic.ListView):
 

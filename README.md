@@ -248,10 +248,17 @@ Crea y administra las contraseñas de aplicaciones. Es posible que debas acceder
 
 <h3>Configura Django</h3>
 
+Configura la zona horari en settings.py
+
+```python
+
+TIME_ZONE = 'America/Buenos_Aires'
+
+```
+
 En settings.py añade 'django.contrib.sites', Dentro de admin ingresar a sites y agregar el dominio a cual pertenece el proyecto,  
 
 ```python
-## En settings.py ## 
 
 INSTALLED_APPS = [
     'django.contrib.sites',

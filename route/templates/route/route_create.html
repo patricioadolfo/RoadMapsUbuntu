@@ -26,7 +26,22 @@
             {% endif %}
       </select>
     </div>
-    
+        <script>
+            let de = document.getElementById('id_origin');
+            de.addEventListener("change", function(e) {
+            
+                if (de.value.toUpperCase() === '{{ another_destin.id }}') {
+                document.getElementById('id_another_origin').disabled = false;
+            } else {
+                document.getElementById('id_another_origin').disabled = true;
+            }
+            });
+        
+        </script>
+
+    <div>{{form.another_origin}}</div>
+</div>
+<div class="form-control">
     <label for="id_destination">Para</label>
     <div>{{form.destination}}</div>
 
@@ -43,9 +58,9 @@
       
       </script>
 
-    <label for="id_another_destin">Destino</label>
     <div>{{form.another_destin}} </div>
-
+</div>
+<div class="form-control">
     <label for="id_description">Descripción</label>
     <div>{{form.description}}</div>
 </div>

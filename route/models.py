@@ -83,11 +83,13 @@ class Route(models.Model):
     
     origin = models.ForeignKey(NodeOrigin, related_name='origin', on_delete=models.SET_NULL, null= True)
 
+    another_origin = models.ForeignKey(NodeDestination, related_name='another_origin', on_delete=models.SET_NULL, null= True, blank= True)
+
     status = models.ForeignKey(States, on_delete=models.SET_NULL, null= True, default= 1)
    
     destination = models.ForeignKey(NodeOrigin, related_name= 'destination', on_delete=models.SET_NULL, null= True)
     
-    another_destin = models.ForeignKey(NodeDestination, on_delete= models.SET_NULL, null= True, blank= True)
+    another_destin = models.ForeignKey(NodeDestination, related_name='another_destin',  on_delete= models.SET_NULL, null= True, blank= True)
     
     description = models.TextField(max_length=1000, help_text="Ingrese una breve descripción del envío.", null= False)
     
@@ -178,3 +180,15 @@ class PrintJob(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return str(self.id)
+    
+class Urls(models.Model):
+
+    name= models.CharField(max_length=100, null= False)
+
+    url= models.URLField(max_length= 100, null= False)
+
+    state= models.ForeignKey(States, on_delete= models.SET_NULL, null= True)
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return str(self.name)

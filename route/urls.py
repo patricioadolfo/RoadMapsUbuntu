@@ -6,6 +6,7 @@ from . import views
 
 urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
+    #path(r'', kwargs={'index':views.view_urls}),
     path('', views.index, name='index'),
     path('route/<int:pk>/edit/', views.update_status, name='route-edit'),
     path('route/', views.RoutesListView.as_view(), name='routes'),

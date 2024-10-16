@@ -9,9 +9,16 @@
   <div class="row align-items-md-stretch"  id="imp1">
   
     <div class="col">  
-
-      <p><strong>Desde: {{ route.origin }}</strong></p> 
-      <p><strong>Para: {{ route.destination }}</strong></p>
+      {% if route.another_origin != None %}
+      <p><strong>Desde: {{ route.another_origin }}</strong></p>
+      {% else %} 
+      <p><strong>Desde: {{ route.origin }}</strong></p>
+      {% endif %} 
+      {% if route.another_destin != None %}
+        <p><strong>Para: {{ route.another_destin.name }}</strong></p>
+      {% else %}
+        <p><strong>Para: {{ route.destination }}</strong></p>
+      {% endif %}
       <p><strong>Descripción:  {{ route.description }}</strong></p>
       <p><strong>Fecha de preparación:  {{ route.preparation_date }}</strong></p> 
 

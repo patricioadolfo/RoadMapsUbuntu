@@ -9,11 +9,12 @@ class RouteForm(forms.ModelForm):
         model = Route
         
         widgets = {
+            'another_origin': forms.Select(attrs={'class': 'form-select', 'disabled': True }),
             'description': forms.Textarea(attrs={'class': 'form-control'}),
             'destination': forms.Select(attrs={'class': 'form-select'}),
             'another_destin': forms.Select(attrs={'class': 'form-select', 'disabled':True }),
         }
-        fields = ('origin','destination', 'another_destin','description')
+        fields = ('origin', 'another_origin' ,'destination', 'another_destin','description')
 
 class OriginForm(forms.ModelForm):
 
